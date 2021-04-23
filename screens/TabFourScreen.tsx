@@ -2,8 +2,8 @@ import * as React from 'react';
 import { StyleSheet } from 'react-native';
 
 import EditScreenInfo from '../components/EditScreenInfo';
-import GoToButton from '../components/GoToButton';
-import { Text, View, Button } from '../components/Themed';
+import NavBar from '../components/NavBar';
+import { Text, View } from '../components/Themed';
 
 export default function TabFourScreen() {
     return (
@@ -11,7 +11,7 @@ export default function TabFourScreen() {
             <Text style={styles.title}>Tab Four</Text>
             <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
             <EditScreenInfo path="/screens/TabFourScreen.tsx" />
-            <GoToButton screenName="TabOne" />
+            <NavBar />
         </View>
     );
 }

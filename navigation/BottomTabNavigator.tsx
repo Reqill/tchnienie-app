@@ -15,6 +15,7 @@ import TabTwoScreen from '../screens/TabTwoScreen';
 import TabThreeScreen from '../screens/TabThreeScreen';
 import TabFourScreen from '../screens/TabFourScreen';
 import { BottomTabParamList, TabOneParamList, TabTwoParamList, TabThreeParamList, TabFourParamList } from '../types';
+import { useNavigation } from '@react-navigation/core';
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -27,33 +28,34 @@ export default function BottomTabNavigator() {
       initialRouteName="TabOne"
       tabBarOptions={{ activeTintColor: Colors[colorScheme].tint, showLabel: false, tabStyle: { backgroundColor: "#303747" } }}>
       <BottomTab.Screen
-        name="TabOne"
+        name='TabOne'
         component={TabOneNavigator}
         options={{
           tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />
         }}
       />
       <BottomTab.Screen
-        name="TabTwo"
+        name='TabTwo'
         component={TabTwoNavigator}
         options={{
           tabBarIcon: ({ color }) => <TabBarIcon name="video" color={color} />,
         }}
       />
       <BottomTab.Screen
-        name="TabThree"
+        name='TabThree'
         component={TabThreeNavigator}
         options={{
           tabBarIcon: ({ color }) => <TabBarIcon name="list" color={color} />,
         }}
       />
       <BottomTab.Screen
-        name="TabFour"
+        name='TabFour'
         component={TabFourNavigator}
         options={{
           tabBarIcon: ({ color }) => <TabBarIcon name="headphones" color={color} />,
         }}
       />
+      {/* {useNavigation().setOptions({ tabBarVisible: false })} */}
     </BottomTab.Navigator>
   );
 }
@@ -69,6 +71,7 @@ function TabBarIcon(props: { name: React.ComponentProps<typeof Feather>['name'];
 const TabOneStack = createStackNavigator<TabOneParamList>();
 
 function TabOneNavigator() {
+  useNavigation().setOptions({ tabBarVisible: false });
   return (
     <TabOneStack.Navigator>
       <TabOneStack.Screen
@@ -84,6 +87,7 @@ function TabOneNavigator() {
 const TabTwoStack = createStackNavigator<TabTwoParamList>();
 
 function TabTwoNavigator() {
+  useNavigation().setOptions({ tabBarVisible: false });
   return (
     <TabTwoStack.Navigator>
       <TabTwoStack.Screen
@@ -98,6 +102,7 @@ function TabTwoNavigator() {
 const TabThreeStack = createStackNavigator<TabThreeParamList>();
 
 function TabThreeNavigator() {
+  useNavigation().setOptions({ tabBarVisible: false });
   return (
     <TabThreeStack.Navigator>
       <TabThreeStack.Screen
@@ -111,6 +116,7 @@ function TabThreeNavigator() {
 const TabFourStack = createStackNavigator<TabFourParamList>();
 
 function TabFourNavigator() {
+  useNavigation().setOptions({ tabBarVisible: false });
   return (
     <TabFourStack.Navigator>
       <TabFourStack.Screen

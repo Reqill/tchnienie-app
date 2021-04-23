@@ -1,14 +1,21 @@
 import * as React from 'react';
-import { Button } from 'react-native';
+import { TouchableOpacity, Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { Feather } from '@expo/vector-icons';
 
-export default function GoToButton({ screenName }) {
+function ButtonIcon(props: { name: React.ComponentProps<typeof Feather>['name']; color: string }) {
+    return <Feather size={30} style={{ marginBottom: 0 }} {...props} />;
+}
+
+export default function GoToButton(props: { screenName: string; iconName: React.ComponentProps<typeof Feather>['name']; color: string }) {
     const navigation = useNavigation();
 
     return (
-        <Button
-            title={`Go to ${screenName}`}
-            onPress={() => navigation.navigate(screenName)}
-        />
+        <TouchableOpacity style={{ padding: 10 }} onPress={() => { navigation.navigate(props.screenName) }
+        }>
+            <ButtonIcon name={props.iconName} color={props.color} />
+        </TouchableOpacity>
+
     );
 }
+
