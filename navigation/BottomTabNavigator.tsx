@@ -16,6 +16,7 @@ import TabThreeScreen from '../screens/TabThreeScreen';
 import TabFourScreen from '../screens/TabFourScreen';
 import { BottomTabParamList, TabOneParamList, TabTwoParamList, TabThreeParamList, TabFourParamList } from '../types';
 import { useNavigation } from '@react-navigation/core';
+import NavBar from './NavBar'
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -79,7 +80,6 @@ function TabOneNavigator() {
         component={TabOneScreen}
         options={{ headerShown: false }}
       />
-
     </TabOneStack.Navigator>
   );
 }

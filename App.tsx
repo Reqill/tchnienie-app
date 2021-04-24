@@ -5,6 +5,8 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import useCachedResources from './hooks/useCachedResources';
 import useColorScheme from './hooks/useColorScheme';
 import Navigation from './navigation';
+import NavigationHandler from './navigation/NavigationHandler'
+
 
 import { useFonts, Poppins_500Medium, Poppins_600SemiBold, Poppins_400Regular, Poppins_300Light } from '@expo-google-fonts/poppins';
 import { Pacifico_400Regular } from '@expo-google-fonts/pacifico';
@@ -30,7 +32,8 @@ export default function App() {
 
     return (
       <SafeAreaProvider>
-        <Navigation colorScheme={colorScheme} />
+        {/* <Navigation colorScheme={colorScheme} /> */}
+        <NavigationHandler />
         <StatusBar />
       </SafeAreaProvider>
     );
