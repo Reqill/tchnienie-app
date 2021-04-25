@@ -12,9 +12,9 @@ function ButtonIcon(props: { name: React.ComponentProps<typeof Feather>['name'];
     return <Feather size={30} style={{ marginBottom: 0 }} {...props} />;
 }
 
-export default function NavBar(props: { visible: boolean; changeTabIdx: Function }) {
+export default function NavBar(props: { visible: Boolean; changeTabIdx: Function; activeIdx: Number }) {
     // const navigation = useNavigation();
-    const [active, setActive] = useState(0)
+    const [active, setActive] = useState(props.activeIdx)
     const colors = [Colors.tintColor, Colors.whiteOff];
     // const tabs = ["TabOne", "TabTwo", "TabThree", "TabFour"]
 
@@ -42,16 +42,16 @@ export default function NavBar(props: { visible: boolean; changeTabIdx: Function
                 end={{ x: 0.56, y: 1.2 }}
             >
                 <TouchableOpacity style={{ padding: 10 }} onPress={(e) => changeColor(0)}>
-                    <ButtonIcon name={"home"} color={active === 0 ? colors[0] : colors[1]} />
+                    <ButtonIcon name={"home"} color={props.activeIdx === 0 ? colors[0] : colors[1]} />
                 </TouchableOpacity>
                 <TouchableOpacity style={{ padding: 10 }} onPress={(e) => changeColor(1)}>
-                    <ButtonIcon name={"video"} color={active === 1 ? colors[0] : colors[1]} />
+                    <ButtonIcon name={"video"} color={props.activeIdx === 1 ? colors[0] : colors[1]} />
                 </TouchableOpacity>
                 <TouchableOpacity style={{ padding: 10 }} onPress={(e) => changeColor(2)}>
-                    <ButtonIcon name={"list"} color={active === 2 ? colors[0] : colors[1]} />
+                    <ButtonIcon name={"list"} color={props.activeIdx === 2 ? colors[0] : colors[1]} />
                 </TouchableOpacity>
                 <TouchableOpacity style={{ padding: 10 }} onPress={(e) => changeColor(3)}>
-                    <ButtonIcon name={"headphones"} color={active === 3 ? colors[0] : colors[1]} />
+                    <ButtonIcon name={"headphones"} color={props.activeIdx === 3 ? colors[0] : colors[1]} />
                 </TouchableOpacity>
             </LinearGradient>
         </View>
