@@ -21,7 +21,9 @@ interface IState {
     activeTabIdx: Number;
     activityDaysInRow: Number;
     currentScreen: JSX.Element;
-    tabHistory: any
+    backBtn: JSX.Element;
+    tabHistory: any;
+    navBarVisible: boolean;
 }
 
 function Icon(props: { name: React.ComponentProps<typeof Feather>['name']; color: string }) {
@@ -35,16 +37,38 @@ export default class NavigationHandler extends React.Component<IProps, IState> {
             activeTabIdx: 0,
             activityDaysInRow: 2,
             currentScreen: <TabOneScreen />,
+            backBtn: <View />,
             tabHistory: [0],
+            navBarVisible: true,
         };
         this.changeTabIdx = this.changeTabIdx.bind(this)
+        this.toggleNavBar = this.toggleNavBar.bind(this)
         if (Platform.OS === 'android') {
             UIManager.setLayoutAnimationEnabledExperimental(true);
         }
     }
 
+    toggleNavBar = () => {
+        this.setState({ navBarVisible: !this.state.navBarVisible }, () => {
+            if (!this.state.navBarVisible) {
+                this.setState({
+                    backBtn: <TouchableOpacity onPress={(e) => this.toggleNavBar()}>
+                        <Icon name="arrow-left" color={Colors.white} style={{ marginTop: 20, marginRight: 6 }} /></TouchableOpacity>
+                })
+            } else {
+                this.setState({ backBtn: <View /> })
+            }
+        })
+
+    }
+
     changeTabIdx = (idx: number) => {
-        const screens = [<TabOneScreen />, <TabTwoScreen />, <TabThreeScreen />, <TabFourScreen />]
+        const screens = [
+            <TabOneScreen tabView={this.state.navBarVisible} toggleNavBar={this.toggleNavBar} />,
+            <TabTwoScreen tabView={this.state.navBarVisible} />,
+            <TabThreeScreen tabView={this.state.navBarVisible} />,
+            <TabFourScreen tabView={this.state.navBarVisible} />
+        ]
         LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
         this.setState({ activeTabIdx: idx, currentScreen: screens[idx] },
             () => {
@@ -61,7 +85,7 @@ export default class NavigationHandler extends React.Component<IProps, IState> {
 
     backAction = () => {
         const screens = [<TabOneScreen />, <TabTwoScreen />, <TabThreeScreen />, <TabFourScreen />]
-        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+        this.setState({ navBarVisible: true })
         if (this.state.tabHistory.length === 1) {
             Alert.alert("Hej!", "Czy na pewno kończymy na dziś?", [
                 {
@@ -79,7 +103,6 @@ export default class NavigationHandler extends React.Component<IProps, IState> {
                     this.setState({ activeTabIdx: this.state.tabHistory[0], currentScreen: screens[this.state.tabHistory[0]] })
                 });
         }
-
         return true;
     };
 
@@ -94,18 +117,22 @@ export default class NavigationHandler extends React.Component<IProps, IState> {
     render() {
         return (
             <View>
+                {/* <Text style={{ position: "absolute", opacity: 0 }}>{this.state.navBarVisible}</Text> */}
                 <View style={styles.background}>
                     <View style={styles.appHeaderBar}>
                         <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
                             <View style={styles.flexTopBar}>
-                                <Text style={styles.appHeaderText}>tchnienie</Text>
+                                <View style={{ flex: 1, flexDirection: "row" }}>
+                                    {this.state.backBtn}
+                                    <Text style={styles.appHeaderText}>tchnienie</Text>
+                                </View>
                                 <View>
                                     <View style={{ flex: 1, flexDirection: "row", alignItems: "center", marginTop: 2 }}>
                                         <Text
                                             style={{ marginTop: 12, marginRight: 14, fontSize: 15, color: Colors.white, fontFamily: "Poppins_500Medium" }}>
                                             🔥 {this.state.activityDaysInRow} dni
                                     </Text>
-                                        <TouchableOpacity>
+                                        <TouchableOpacity onPress={() => this.toggleNavBar()}>
                                             <Icon name="settings" color={Colors.whiteOff} />
                                         </TouchableOpacity>
                                     </View>
@@ -131,7 +158,7 @@ export default class NavigationHandler extends React.Component<IProps, IState> {
                         style={{ zIndex: 998, position: "absolute", bottom: 0, width: "100%", height: 35 }}
                     />
                 </View >
-                <NavBar visible={true} changeTabIdx={this.changeTabIdx} activeIdx={this.state.activeTabIdx} />
+                <NavBar visible={this.state.navBarVisible} changeTabIdx={this.changeTabIdx} activeIdx={this.state.activeTabIdx} />
             </View >
         );
     }

@@ -5,6 +5,7 @@ import dateNames from "../constants/CalendarNames"
 
 export const getCurrDate = (moodIdx?: number) => {
     const date = new Date();
+    // const hour = date.getHours();
     const day = date.getDate();
     const month = date.getMonth() + 1;
     const year = date.getFullYear();
@@ -16,7 +17,7 @@ export const getCurrDate = (moodIdx?: number) => {
     const week = Math.floor(dayOfYear / 7);
 
     const output = {
-        fulldate: `${day}-${month}-${year}`,
+        fulldate: `${day}/${month}/${year}`,
         day: day,
         month: month,
         monthNameFull: dateNames.monthNameFull[month - 1],
@@ -30,22 +31,17 @@ export const getCurrDate = (moodIdx?: number) => {
     }
     return output;
 }
-
 export const saveCurrMood = (moodIdx: number) => {
     const now = getCurrDate();
     const todayMoodInfo = {
         moodIdx: moodIdx,
         moodName: EmotionName[moodIdx],
         dayInfo: now,
-    };
-    // const dayKey = `${now.day}/${now.month}/${now.year}`;
-    // const weekKey = `${now.week}/${now.year}`;
-    // getJSONData(weekKey).then((e) => {
-    // });
-
+    }
     const moodKey = `moodWholeData`;
     getJSONData(moodKey).then((response) => {
         const newMoodWhole = response;
+        // console.log(response)
         if (newMoodWhole === null) {
             storeJSONData(moodKey, [Object.values(todayMoodInfo)]);
         } else {
@@ -57,13 +53,13 @@ export const saveCurrMood = (moodIdx: number) => {
                 && foo[2].year === todayMoodInfo.dayInfo.year
             ) {
                 tmp.unshift(boo);
-                console.log(tmp)
+                // console.log(tmp)
                 storeJSONData(moodKey, tmp)
             }
             else {
                 tmp.unshift(foo);
                 tmp.unshift(boo);
-                console.log(tmp)
+                // console.log(tmp)
                 storeJSONData(moodKey, tmp)
             }
         }

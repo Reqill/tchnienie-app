@@ -6,19 +6,19 @@ const CustomElementStyles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         width: "85%",
-        height: 57,
+
         // backgroundColor: "#303747",
         alignItems: 'center',
         justifyContent: 'space-around',
         borderRadius: 100,
         paddingHorizontal: 10,
         position: "absolute",
+        bottom: 20,
+        height: 57,
         zIndex: 999,
-        bottom: 17,
         borderColor: Colors.borderTwo,
         borderWidth: 1.8,
         opacity: 1,
-
         shadowColor: "rgba(0,0,0,0.5)",
         shadowOffset: {
             width: 0,

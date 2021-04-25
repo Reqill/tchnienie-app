@@ -10,10 +10,13 @@ import { Feather } from '@expo/vector-icons';
 import EmotionName from '../constants/EmotionName';
 import { getCurrDate, saveCurrMood } from "../components/SaveMenage"
 
-export default function TabOneScreen() {
+export default function TabOneScreen(props: { tabView: boolean; toggleNavBar: Function }) {
+  const toggle = () => {
+    props.toggleNavBar();
+  }
   return (
     <View>
-      <BasicContainer content={<MoodCart />} />
+      <BasicContainer content={<MoodCart tabView={props.tabView} toggleNavBar={toggle} />} />
       <BasicContainer content={<CourseSummaryCard />} />
       <BasicContainer content={<VideosSummaryCard />} />
       <BasicContainer content={<StatsCard />} />
@@ -22,8 +25,9 @@ export default function TabOneScreen() {
   );
 }
 
-const MoodCart = () => {
+const MoodCart = (props: { tabView: boolean; toggleNavBar: Function }) => {
   const [expanded, setExpanded] = useState(false);
+  const [showWholeLog, setShowWholeLog] = useState(props.tabView);
   const [moreInfo, setMoreInfo] = useState(false);
   const [currEmotion, setCurrEmotion] = useState(0);
   const [emotionList, setEmotionList] = useState([])
@@ -35,6 +39,10 @@ const MoodCart = () => {
     setExpanded(!expanded);
   }
 
+  const toggleLog = () => {
+    props.toggleNavBar();
+  }
+
   useEffect(() => {
     let tmp = [];
     for (let i = 0; i < EmotionName.length; i++) {
@@ -42,8 +50,9 @@ const MoodCart = () => {
         tmp.push(i)
       }
     }
-    setEmotionList(tmp)
-  }, [currEmotion])
+    setShowWholeLog(!props.tabView);
+    setEmotionList(tmp);
+  }, [currEmotion, props.tabView])
 
 
   const generateEmotionButtons = () => {
@@ -83,13 +92,18 @@ const MoodCart = () => {
             <Text style={[CustomElementStyles.firstTabDescriptioText, { color: Colors.tintColor }]} >{EmotionName[currEmotion]}</Text>
             <Feather name="chevron-down" size={20} color={Colors.tintColor} style={{ marginTop: 3, marginLeft: 3 }} />
           </TouchableOpacity>
-          <TouchableOpacity><Text style={CustomElementStyles.other}>pokaż więcej...</Text></TouchableOpacity>
+          <TouchableOpacity onPress={(e) => { toggleLog() }}>
+            <Text style={CustomElementStyles.other}>pokaż więcej...</Text>
+          </TouchableOpacity>
         </View>
         <Image style={{ width: 70, height: 70 }} source={Emotion[currEmotion]} />
       </View>
       <View style={{ height: expanded ? null : 0, overflow: 'hidden', flex: 1, flexDirection: "row", flexWrap: "wrap", marginLeft: -3, }}>
         {generateEmotionButtons()}
       </View>
+      {/* <View style={{ width: showWholeLog ? null : 0, overflow: 'hidden', position: "absolute", height: "100%" }}>
+        <Text>lessgo</Text>
+      </View> */}
     </View>
 
   );

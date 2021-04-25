@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react'
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, LayoutAnimation, Platform, UIManager, Animated } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Colors from '../constants/Colors';
 import CustomElementStyles from '../constants/CustomElementStyles';
@@ -16,11 +16,22 @@ export default function NavBar(props: { visible: Boolean; changeTabIdx: Function
     // const navigation = useNavigation();
     const [active, setActive] = useState(props.activeIdx)
     const colors = [Colors.tintColor, Colors.whiteOff];
+    // const [opacity, setOpacity] = useState((new Animated.Value(0)))
     // const tabs = ["TabOne", "TabTwo", "TabThree", "TabFour"]
 
     // let route = useRoute()
     // console.log(route.name)
-
+    if (Platform.OS === 'android') {
+        UIManager.setLayoutAnimationEnabledExperimental(true);
+    }
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    // const _start = () => {
+    //     Animated.timing(opacity, {
+    //         toValue: 1,
+    //         duration: 1000,
+    //         useNativeDriver: true
+    //     }).start();
+    // };
 
     const changeColor = (idx: number) => {
         setActive(idx)
@@ -29,15 +40,27 @@ export default function NavBar(props: { visible: Boolean; changeTabIdx: Function
     }
 
     useEffect(() => {
-        props.changeTabIdx(active);
-    }, [active])
 
+        props.changeTabIdx(active);
+
+    }, [active])
+    // _start();
 
     return (
         <View style={styles.center}>
+            {/* <Animated.View
+                style={{
+                    opacity: opacity,
+                    flex: 1,
+                    width: "100%",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    flexDirection: "row"
+                }}
+            > */}
             <LinearGradient
                 colors={[Colors.blueThree, Colors.blueFour]}
-                style={CustomElementStyles.navbar}
+                style={[CustomElementStyles.navbar, { marginBottom: (props.visible === true) ? 0 : -100 }]}
                 start={{ x: 0.44, y: -.2 }}
                 end={{ x: 0.56, y: 1.2 }}
             >
@@ -54,6 +77,8 @@ export default function NavBar(props: { visible: Boolean; changeTabIdx: Function
                     <ButtonIcon name={"headphones"} color={props.activeIdx === 3 ? colors[0] : colors[1]} />
                 </TouchableOpacity>
             </LinearGradient>
+            {/* </Animated.View> */}
+
         </View>
 
     );
