@@ -36,7 +36,7 @@ export default function NavBar(props: { visible: Boolean; changeTabIdx: Function
     return (
         <View style={styles.center}>
             <LinearGradient
-                colors={[Colors.blueOne, Colors.blueTwo]}
+                colors={[Colors.blueThree, Colors.blueFour]}
                 style={CustomElementStyles.navbar}
                 start={{ x: 0.44, y: -.2 }}
                 end={{ x: 0.56, y: 1.2 }}

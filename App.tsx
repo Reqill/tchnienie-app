@@ -14,7 +14,7 @@ import { Pacifico_400Regular } from '@expo-google-fonts/pacifico';
 export default function App() {
   const isLoadingComplete = useCachedResources(); //alredy checked
   // const colorScheme = useColorScheme(); //default and checked
-  const colorScheme = "dark";
+  // const colorScheme = "dark";
 
   //loading additional fonts here cuz im too stupid to understand how to load them in useCachedResources hook
   //if it doesn't work just make this variable as a function and call it with useCachedResources
