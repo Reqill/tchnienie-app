@@ -41,31 +41,29 @@ export const saveCurrMood = (moodIdx: number) => {
     // const dayKey = `${now.day}/${now.month}/${now.year}`;
     // const weekKey = `${now.week}/${now.year}`;
     // getJSONData(weekKey).then((e) => {
-
     // });
+
     const moodKey = `moodWholeData`;
     getJSONData(moodKey).then((response) => {
-        // const newMoodWhole: Array<any> = [];
         const newMoodWhole = response;
-        // response.map((el: any) => newMoodWhole.push(el));
         if (newMoodWhole === null) {
             storeJSONData(moodKey, [Object.values(todayMoodInfo)]);
         } else {
             const tmp = Object.values(newMoodWhole);
             const boo = Object.values(todayMoodInfo);
-            const foo = tmp.pop();
+            const foo = tmp.shift();
             if (
                 foo[2].dayOfYear === todayMoodInfo.dayInfo.dayOfYear
                 && foo[2].year === todayMoodInfo.dayInfo.year
             ) {
-                tmp.push(boo);
-                // console.log(tmp)
+                tmp.unshift(boo);
+                console.log(tmp)
                 storeJSONData(moodKey, tmp)
             }
             else {
-                tmp.push(foo);
-                tmp.push(boo);
-                // console.log(tmp)
+                tmp.unshift(foo);
+                tmp.unshift(boo);
+                console.log(tmp)
                 storeJSONData(moodKey, tmp)
             }
         }
