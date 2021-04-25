@@ -4,7 +4,7 @@ import TabThreeScreen from '../screens/TabThreeScreen';
 import TabFourScreen from '../screens/TabFourScreen';
 import NavBar from './NavBar'
 import React, { useState, useEffect } from 'react';
-import { View, Text, Button, TouchableOpacity, StyleSheet, ScrollView, BackHandler, Alert } from 'react-native'
+import { View, Text, Button, TouchableOpacity, StyleSheet, ScrollView, BackHandler, Alert, LayoutAnimation, Platform, UIManager } from 'react-native'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { Fontisto } from '@expo/vector-icons';
 import Colors from '../constants/Colors';
@@ -12,6 +12,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Feather } from '@expo/vector-icons';
 import BasicContainer from '../components/BasicContainer'
 import { throwIfAudioIsDisabled } from 'expo-av/build/Audio/AudioAvailability';
+
 
 interface IProps {
 
@@ -37,10 +38,14 @@ export default class NavigationHandler extends React.Component<IProps, IState> {
             tabHistory: [0],
         };
         this.changeTabIdx = this.changeTabIdx.bind(this)
+        if (Platform.OS === 'android') {
+            UIManager.setLayoutAnimationEnabledExperimental(true);
+        }
     }
 
     changeTabIdx = (idx: number) => {
         const screens = [<TabOneScreen />, <TabTwoScreen />, <TabThreeScreen />, <TabFourScreen />]
+        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
         this.setState({ activeTabIdx: idx, currentScreen: screens[idx] },
             () => {
                 const oldHistory = this.state.tabHistory;
@@ -56,6 +61,7 @@ export default class NavigationHandler extends React.Component<IProps, IState> {
 
     backAction = () => {
         const screens = [<TabOneScreen />, <TabTwoScreen />, <TabThreeScreen />, <TabFourScreen />]
+        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
         if (this.state.tabHistory.length === 1) {
             Alert.alert("Hej!", "Czy na pewno kończymy na dziś?", [
                 {

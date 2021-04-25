@@ -84,6 +84,19 @@ const CustomElementStyles = StyleSheet.create({
         fontSize: 14,
         letterSpacing: .5,
         color: Colors.other
+    },
+    buttonText: {
+        color: Colors.whiteOff,
+        fontFamily: "Poppins_500Medium",
+        fontSize: 14,
+        paddingHorizontal: 15,
+        paddingVertical: 3,
+    },
+    button: {
+        backgroundColor: Colors.paleBlue,
+        margin: 2.5,
+        borderRadius: 100,
+        marginBottom: 3
     }
 });
 
