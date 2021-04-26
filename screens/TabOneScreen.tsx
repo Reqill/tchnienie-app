@@ -1,18 +1,18 @@
 import * as React from 'react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, createRef } from 'react';
 import { Text, View, StyleSheet, Image, TouchableOpacity, LayoutAnimation, Platform, UIManager } from 'react-native';
 import BasicContainer from '../components/BasicContainer'
 import Colors from '../constants/Colors';
 import CustomElementStyles from '../constants/CustomElementStyles';
 import Emotion from "../constants/EmotionEmoji"
+import EmotionName from '../constants/EmotionName';
 import EmotionIdx from "../constants/EmotionIdx"
 import { Feather } from '@expo/vector-icons';
-import EmotionName from '../constants/EmotionName';
 import { getCurrDate, saveCurrMood } from "../components/SaveMenage"
 
-export default function TabOneScreen(props: { tabView: boolean; toggleNavBar: Function }) {
-  const toggle = () => {
-    props.toggleNavBar();
+export default function TabOneScreen(props: { tabView: boolean; toggleNavBar: Function; }) {
+  const toggle = (e) => {
+    props.toggleNavBar(e);
   }
   return (
     <View>
@@ -27,8 +27,7 @@ export default function TabOneScreen(props: { tabView: boolean; toggleNavBar: Fu
 
 const MoodCart = (props: { tabView: boolean; toggleNavBar: Function }) => {
   const [expanded, setExpanded] = useState(false);
-  const [showWholeLog, setShowWholeLog] = useState(props.tabView);
-  const [moreInfo, setMoreInfo] = useState(false);
+  const [showWholeLog, setShowWholeLog] = useState(false);
   const [currEmotion, setCurrEmotion] = useState(0);
   const [emotionList, setEmotionList] = useState([])
   if (Platform.OS === 'android') {
@@ -40,7 +39,8 @@ const MoodCart = (props: { tabView: boolean; toggleNavBar: Function }) => {
   }
 
   const toggleLog = () => {
-    props.toggleNavBar();
+    setShowWholeLog(true);
+    props.toggleNavBar("TOGGLE_MOOD_LOG");
   }
 
   useEffect(() => {
@@ -50,14 +50,13 @@ const MoodCart = (props: { tabView: boolean; toggleNavBar: Function }) => {
         tmp.push(i)
       }
     }
-    setShowWholeLog(!props.tabView);
     setEmotionList(tmp);
   }, [currEmotion, props.tabView])
 
 
   const generateEmotionButtons = () => {
     return emotionList.map((el, i) => (
-      <GenerateEmotionButton
+      <GenerateEmotionButton key={i}
         idx={el}
       />
     ));
@@ -76,7 +75,6 @@ const MoodCart = (props: { tabView: boolean; toggleNavBar: Function }) => {
     saveCurrMood(idx);
     changeLayout();
   }
-
   return (
     <View>
       <View style={CustomElementStyles.mainHeader}>
@@ -90,7 +88,7 @@ const MoodCart = (props: { tabView: boolean; toggleNavBar: Function }) => {
             onPress={(e) => changeLayout()}
           >
             <Text style={[CustomElementStyles.firstTabDescriptioText, { color: Colors.tintColor }]} >{EmotionName[currEmotion]}</Text>
-            <Feather name="chevron-down" size={20} color={Colors.tintColor} style={{ marginTop: 3, marginLeft: 3 }} />
+            <Feather name={!expanded ? "chevron-down" : "chevron-up"} size={20} color={Colors.tintColor} style={{ marginTop: 3, marginLeft: 3 }} />
           </TouchableOpacity>
           <TouchableOpacity onPress={(e) => { toggleLog() }}>
             <Text style={CustomElementStyles.other}>pokaż więcej...</Text>
@@ -101,9 +99,6 @@ const MoodCart = (props: { tabView: boolean; toggleNavBar: Function }) => {
       <View style={{ height: expanded ? null : 0, overflow: 'hidden', flex: 1, flexDirection: "row", flexWrap: "wrap", marginLeft: -3, }}>
         {generateEmotionButtons()}
       </View>
-      {/* <View style={{ width: showWholeLog ? null : 0, overflow: 'hidden', position: "absolute", height: "100%" }}>
-        <Text>lessgo</Text>
-      </View> */}
     </View>
 
   );

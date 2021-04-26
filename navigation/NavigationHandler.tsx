@@ -3,8 +3,8 @@ import TabTwoScreen from '../screens/TabTwoScreen';
 import TabThreeScreen from '../screens/TabThreeScreen';
 import TabFourScreen from '../screens/TabFourScreen';
 import NavBar from './NavBar'
-import React, { useState, useEffect } from 'react';
-import { View, Text, Button, TouchableOpacity, StyleSheet, ScrollView, BackHandler, Alert, LayoutAnimation, Platform, UIManager } from 'react-native'
+import React, { useState, useEffect, createRef } from 'react';
+import { View, Text, Button, TouchableOpacity, Image, StyleSheet, ScrollView, BackHandler, Alert, FlatList, LayoutAnimation, Platform, UIManager } from 'react-native'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { Fontisto } from '@expo/vector-icons';
 import Colors from '../constants/Colors';
@@ -12,8 +12,22 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Feather } from '@expo/vector-icons';
 import BasicContainer from '../components/BasicContainer'
 import { throwIfAudioIsDisabled } from 'expo-av/build/Audio/AudioAvailability';
+// import MoodLog from '../components/MoodLog'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Emotion from "../constants/EmotionEmoji"
+import EmotionName from '../constants/EmotionName';
+import CustomElementStyles from '../constants/CustomElementStyles';
+// import MoodLog from '../components/MoodLog';
 
 
+const getJSONData = async (storageKey: string) => {
+    try {
+        const jsonValue = await AsyncStorage.getItem(storageKey)
+        return jsonValue != null ? JSON.parse(jsonValue) : null;
+    } catch (e) {
+        console.log(`Data read error: ${e}`)
+    }
+}
 interface IProps {
 
 }
@@ -24,10 +38,37 @@ interface IState {
     backBtn: JSX.Element;
     tabHistory: any;
     navBarVisible: boolean;
+    activeMoodLog: boolean;
+    moodLog: JSX.Element;
 }
 
 function Icon(props: { name: React.ComponentProps<typeof Feather>['name']; color: string }) {
     return <Feather size={30} style={{ marginTop: 8, marginRight: 0 }}{...props} />;
+}
+
+function MoodLog(props: any) {
+    const MoodCart = () => {
+        console.log()
+        return (
+            <View style={{ marginBottom: -10 }}>
+                <View style={CustomElementStyles.mainHeader}>
+                    <Text style={CustomElementStyles.mainHeaderText}>{props.item[2].day}. {props.item[2].monthNameFull} {props.item[2].year}</Text>
+                </View>
+                <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between", marginTop: 4 }}>
+                    <View style={{ maxWidth: "100%" }}>
+                        <Text style={[CustomElementStyles.firstTabDescriptioText, { color: Colors.whiteOff }]}>Wtedy czułam/em się:</Text>
+                        <View style={{ marginTop: -4, marginBottom: 7, flex: 1, flexDirection: "row" }}>
+                            <Text style={[CustomElementStyles.firstTabDescriptioText, { color: Colors.tintColor }]} >{props.item[1]}</Text>
+                        </View>
+                    </View>
+                    <Image style={{ width: 70, height: 70, marginTop: -30 }} source={Emotion[props.item[0]]} />
+                </View>
+            </View>
+        );
+    }
+    return (
+        <BasicContainer content={<MoodCart />} />
+    );
 }
 
 export default class NavigationHandler extends React.Component<IProps, IState> {
@@ -37,9 +78,11 @@ export default class NavigationHandler extends React.Component<IProps, IState> {
             activeTabIdx: 0,
             activityDaysInRow: 2,
             currentScreen: <TabOneScreen />,
+            moodLog: <View />,
             backBtn: <View />,
             tabHistory: [0],
             navBarVisible: true,
+            activeMoodLog: false,
         };
         this.changeTabIdx = this.changeTabIdx.bind(this)
         this.toggleNavBar = this.toggleNavBar.bind(this)
@@ -48,7 +91,26 @@ export default class NavigationHandler extends React.Component<IProps, IState> {
         }
     }
 
-    toggleNavBar = () => {
+    toggleNavBar = (e?: any) => {
+        if (e === "TOGGLE_MOOD_LOG") {
+            this.setState({ activeMoodLog: true })
+            let foo: any = [];
+            getJSONData("moodWholeData").then((res) => {
+                const tmp = res;
+                foo = Object.values(tmp);
+                if ((typeof foo[0]) === undefined) {
+                    this.setState({ moodLog: <Text>No activity</Text> });
+                } else {
+                    this.setState({
+                        moodLog: <FlatList
+                            data={foo}
+                            renderItem={MoodLog}
+                            keyExtractor={(item) => item[2].fulldate}
+                        />
+                    });
+                }
+            })
+        }
         this.setState({ navBarVisible: !this.state.navBarVisible }, () => {
             if (!this.state.navBarVisible) {
                 this.setState({
@@ -56,13 +118,15 @@ export default class NavigationHandler extends React.Component<IProps, IState> {
                         <Icon name="arrow-left" color={Colors.white} style={{ marginTop: 20, marginRight: 6 }} /></TouchableOpacity>
                 })
             } else {
+                this.setState({ activeMoodLog: false })
                 this.setState({ backBtn: <View /> })
             }
-        })
 
+        })
+        // console.log(this.state.navBarVisible)
     }
 
-    changeTabIdx = (idx: number) => {
+    changeTabIdx = (idx: number, component: boolean) => {
         const screens = [
             <TabOneScreen tabView={this.state.navBarVisible} toggleNavBar={this.toggleNavBar} />,
             <TabTwoScreen tabView={this.state.navBarVisible} />,
@@ -84,27 +148,37 @@ export default class NavigationHandler extends React.Component<IProps, IState> {
     }
 
     backAction = () => {
-        const screens = [<TabOneScreen />, <TabTwoScreen />, <TabThreeScreen />, <TabFourScreen />]
-        this.setState({ navBarVisible: true })
-        if (this.state.tabHistory.length === 1) {
-            Alert.alert("Hej!", "Czy na pewno kończymy na dziś?", [
-                {
-                    text: "Nie",
-                    onPress: () => null,
-                    style: "cancel"
-                },
-                { text: "TAK", onPress: () => BackHandler.exitApp() }
-            ]);
+        const screens = [
+            <TabOneScreen tabView={this.state.navBarVisible} toggleNavBar={this.toggleNavBar} />,
+            <TabTwoScreen />,
+            <TabThreeScreen />,
+            <TabFourScreen />
+        ]
+        if (!this.state.navBarVisible) {
+            this.toggleNavBar();
         } else {
-            const tmp = this.state.tabHistory;
-            tmp.shift();
-            this.setState({ tabHistory: tmp },
-                () => {
-                    this.setState({ activeTabIdx: this.state.tabHistory[0], currentScreen: screens[this.state.tabHistory[0]] })
-                });
+            if (this.state.tabHistory.length === 1) {
+                Alert.alert("Hej!", "Czy na pewno kończymy na dziś?", [
+                    {
+                        text: "Nie",
+                        onPress: () => null,
+                        style: "cancel"
+                    },
+                    { text: "TAK", onPress: () => BackHandler.exitApp() }
+                ]);
+            } else {
+                const tmp = this.state.tabHistory;
+                tmp.shift();
+                this.setState({ tabHistory: tmp },
+                    () => {
+                        this.setState({ activeTabIdx: this.state.tabHistory[0], currentScreen: screens[this.state.tabHistory[0]] })
+                    });
+            }
         }
+
+
         return true;
-    };
+    }
 
     componentDidMount() {
         BackHandler.addEventListener("hardwareBackPress", this.backAction);
@@ -152,6 +226,14 @@ export default class NavigationHandler extends React.Component<IProps, IState> {
                         <ScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
                             {this.state.currentScreen}
                         </ScrollView>
+                        <View style={{
+                            position: "absolute", width: "100%", maxWidth: "100%", zIndex: 997,
+                            height: this.state.activeMoodLog ? "100%" : "0%", maxHeight: "100%",
+                            top: 0, flex: 1, justifyContent: "center", flexDirection: "row",
+                            backgroundColor: Colors.backgroundColor
+                        }}>
+                            {this.state.moodLog}
+                        </View>
                     </View>
                     <LinearGradient
                         colors={["transparent", Colors.backgroundColor]}
