@@ -5,13 +5,12 @@ const CustomElementStyles = StyleSheet.create({
     navbar: {
         flex: 1,
         flexDirection: 'row',
-        width: "85%",
-
+        width: "80%",
         // backgroundColor: "#303747",
         alignItems: 'center',
         justifyContent: 'space-around',
         borderRadius: 100,
-        paddingHorizontal: 10,
+        paddingHorizontal: 30,
         position: "absolute",
         bottom: 20,
         height: 57,
@@ -97,6 +96,29 @@ const CustomElementStyles = StyleSheet.create({
         margin: 2.5,
         borderRadius: 100,
         marginBottom: 3
+    },
+    courseContainer: {
+        flex: 1,
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+        width: "100%",
+        marginBottom: -8,
+        marginHorizontal: -5,
+        padding: 2
+    },
+    courseHeader: {
+        fontSize: 18,
+        fontFamily: "Poppins_500Medium",
+        color: Colors.whiteOff,
+        opacity: 1,
+        letterSpacing: .40,
+    },
+    courseOther: {
+        fontSize: 14,
+        fontFamily: "Poppins_400Regular",
+        color: "#8D9199",
+        letterSpacing: .40,
     }
 });
 

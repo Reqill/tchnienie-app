@@ -1,5 +1,5 @@
 import * as React from 'react'
-import BasicContainer from "./BasicContainer"
+import BasicContainer from "../components/BasicContainer"
 import Emotion from "../constants/EmotionEmoji"
 import CustomElementStyles from '../constants/CustomElementStyles';
 import { Text, View, Image } from 'react-native'

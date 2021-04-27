@@ -64,17 +64,18 @@ export default function NavBar(props: { visible: Boolean; changeTabIdx: Function
                 start={{ x: 0.44, y: -.2 }}
                 end={{ x: 0.56, y: 1.2 }}
             >
+
+                {/* <TouchableOpacity style={{ padding: 10 }} onPress={(e) => changeColor(1)}>
+                    <ButtonIcon name={"video"} color={props.activeIdx === 1 ? colors[0] : colors[1]} />
+                </TouchableOpacity> */}
+                <TouchableOpacity style={{ padding: 10 }} onPress={(e) => changeColor(2)}>
+                    <ButtonIcon name={"headphones"} color={props.activeIdx === 2 ? colors[0] : colors[1]} />
+                </TouchableOpacity>
                 <TouchableOpacity style={{ padding: 10 }} onPress={(e) => changeColor(0)}>
                     <ButtonIcon name={"home"} color={props.activeIdx === 0 ? colors[0] : colors[1]} />
                 </TouchableOpacity>
                 <TouchableOpacity style={{ padding: 10 }} onPress={(e) => changeColor(1)}>
-                    <ButtonIcon name={"video"} color={props.activeIdx === 1 ? colors[0] : colors[1]} />
-                </TouchableOpacity>
-                <TouchableOpacity style={{ padding: 10 }} onPress={(e) => changeColor(2)}>
-                    <ButtonIcon name={"list"} color={props.activeIdx === 2 ? colors[0] : colors[1]} />
-                </TouchableOpacity>
-                <TouchableOpacity style={{ padding: 10 }} onPress={(e) => changeColor(3)}>
-                    <ButtonIcon name={"headphones"} color={props.activeIdx === 3 ? colors[0] : colors[1]} />
+                    <ButtonIcon name={"list"} color={props.activeIdx === 1 ? colors[0] : colors[1]} />
                 </TouchableOpacity>
             </LinearGradient>
             {/* </Animated.View> */}

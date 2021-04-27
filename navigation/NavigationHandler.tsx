@@ -14,7 +14,8 @@ import BasicContainer from '../components/BasicContainer'
 import { throwIfAudioIsDisabled } from 'expo-av/build/Audio/AudioAvailability';
 // import MoodLog from '../components/MoodLog'
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import MoodLog from '../components/MoodLog';
+import MoodLog from '../screens/MoodLog';
+import Settings from '../screens/Settings'
 
 
 const getJSONData = async (storageKey: string) => {
@@ -37,6 +38,7 @@ interface IState {
     navBarVisible: boolean;
     activeMoodLog: boolean;
     moodLog: JSX.Element;
+    activeSettings: boolean;
 }
 
 function Icon(props: { name: React.ComponentProps<typeof Feather>['name']; color: string }) {
@@ -57,6 +59,7 @@ export default class NavigationHandler extends React.Component<IProps, IState> {
             tabHistory: [0],
             navBarVisible: true,
             activeMoodLog: false,
+            activeSettings: false,
         };
         this.changeTabIdx = this.changeTabIdx.bind(this)
         this.toggleNavBar = this.toggleNavBar.bind(this)
@@ -74,6 +77,7 @@ export default class NavigationHandler extends React.Component<IProps, IState> {
                 foo = Object.values(tmp);
                 if ((typeof foo[0]) === undefined) {
                     this.setState({ moodLog: <Text>No activity</Text> });
+                    // TO-DO: Dodać wiadomość gdy nie ma historii (co nie powinno się wydarzyć tho XD)
                 } else {
                     this.setState({
                         moodLog: <FlatList
@@ -85,27 +89,48 @@ export default class NavigationHandler extends React.Component<IProps, IState> {
                 }
             })
         }
-        this.setState({ navBarVisible: !this.state.navBarVisible }, () => {
-            if (!this.state.navBarVisible) {
+        if (e !== "TOGGLE_SETTINGS") {
+            this.setState({ navBarVisible: !this.state.navBarVisible }, () => {
+                if (!this.state.navBarVisible) {
+                    this.setState({
+                        backBtn:
+                            <TouchableOpacity onPress={(e) => this.toggleNavBar()}>
+                                <Icon name="arrow-left" color={Colors.white} style={{ marginTop: 20, marginRight: 6 }} />
+                            </TouchableOpacity>
+                    })
+                } else {
+                    this.setState({ activeMoodLog: false })
+                    this.setState({ activeSettings: false })
+                    this.setState({ backBtn: <View /> })
+                }
+            })
+        } else {
+            if (!this.state.activeSettings) {
                 this.setState({
-                    backBtn: <TouchableOpacity onPress={(e) => this.toggleNavBar()}>
-                        <Icon name="arrow-left" color={Colors.white} style={{ marginTop: 20, marginRight: 6 }} /></TouchableOpacity>
+                    backBtn:
+                        <TouchableOpacity onPress={(e) => this.toggleNavBar()}>
+                            <Icon name="arrow-left" color={Colors.white} style={{ marginTop: 20, marginRight: 6 }} />
+                        </TouchableOpacity>
                 })
-            } else {
                 this.setState({ activeMoodLog: false })
+                this.setState({ activeSettings: true })
+                this.setState({ navBarVisible: false })
+            } else {
+                this.setState({ activeSettings: false })
+                this.setState({ activeMoodLog: false })
+                this.setState({ navBarVisible: true })
                 this.setState({ backBtn: <View /> })
             }
 
-        })
-        // console.log(this.state.navBarVisible)
+        }
     }
 
     changeTabIdx = (idx: number, component: boolean) => {
         const screens = [
             <TabOneScreen tabView={this.state.navBarVisible} toggleNavBar={this.toggleNavBar} />,
-            <TabTwoScreen tabView={this.state.navBarVisible} />,
+            <TabTwoScreen tabView={this.state.navBarVisible} active={this.state.activeTabIdx} />,
             <TabThreeScreen tabView={this.state.navBarVisible} />,
-            <TabFourScreen tabView={this.state.navBarVisible} />
+            // <TabFourScreen tabView={this.state.navBarVisible} />
         ]
         LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
         this.setState({ activeTabIdx: idx, currentScreen: screens[idx] },
@@ -124,10 +149,16 @@ export default class NavigationHandler extends React.Component<IProps, IState> {
     backAction = () => {
         const screens = [
             <TabOneScreen tabView={this.state.navBarVisible} toggleNavBar={this.toggleNavBar} />,
-            <TabTwoScreen />,
+            <TabTwoScreen active={this.state.activeTabIdx} />,
             <TabThreeScreen />,
-            <TabFourScreen />
+            // <TabFourScreen />
         ]
+
+        if (this.state.activeSettings) {
+            this.toggleNavBar("TOGGLE_SETTINGS")
+            return true
+        }
+
         if (!this.state.navBarVisible) {
             this.toggleNavBar();
         } else {
@@ -180,7 +211,7 @@ export default class NavigationHandler extends React.Component<IProps, IState> {
                                             style={{ marginTop: 12, marginRight: 14, fontSize: 15, color: Colors.white, fontFamily: "Poppins_500Medium" }}>
                                             🔥 {this.state.activityDaysInRow} dni
                                     </Text>
-                                        <TouchableOpacity onPress={() => this.toggleNavBar()}>
+                                        <TouchableOpacity onPress={() => this.toggleNavBar("TOGGLE_SETTINGS")}>
                                             <Icon name="settings" color={Colors.whiteOff} />
                                         </TouchableOpacity>
                                     </View>
@@ -200,13 +231,12 @@ export default class NavigationHandler extends React.Component<IProps, IState> {
                         <ScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
                             {this.state.currentScreen}
                         </ScrollView>
-                        <View style={{
-                            position: "absolute", width: "100%", maxWidth: "100%", zIndex: 997,
-                            height: this.state.activeMoodLog ? "100%" : "0%", maxHeight: "100%",
-                            top: 0, flex: 1, justifyContent: "center", flexDirection: "row",
-                            backgroundColor: Colors.backgroundColor
-                        }}>
+
+                        <View style={[styles.hiddenScreen, { height: this.state.activeMoodLog ? "100%" : "0%", }]}>
                             {this.state.moodLog}
+                        </View>
+                        <View style={[styles.hiddenScreen, { height: this.state.activeSettings ? "100%" : "0%", }]}>
+                            <Settings />
                         </View>
                     </View>
                     <LinearGradient
@@ -222,6 +252,18 @@ export default class NavigationHandler extends React.Component<IProps, IState> {
 
 
 const styles = StyleSheet.create({
+    hiddenScreen: {
+        position: "absolute",
+        width: "100%",
+        maxWidth: "100%",
+        zIndex: 997,
+        maxHeight: "100%",
+        bottom: 0,
+        flex: 1,
+        justifyContent: "center",
+        flexDirection: "row",
+        backgroundColor: Colors.backgroundColor
+    },
     appHeaderText: {
         fontFamily: "Pacifico_400Regular",
         fontSize: 32,

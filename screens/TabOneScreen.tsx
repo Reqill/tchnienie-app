@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState, useEffect, createRef } from 'react';
-import { Text, View, StyleSheet, Image, TouchableOpacity, LayoutAnimation, Platform, UIManager } from 'react-native';
+import { Text, View, StyleSheet, Image, TouchableOpacity, ScrollView, LayoutAnimation, Platform, UIManager } from 'react-native';
 import BasicContainer from '../components/BasicContainer'
 import Colors from '../constants/Colors';
 import CustomElementStyles from '../constants/CustomElementStyles';
@@ -11,10 +11,11 @@ import { Feather } from '@expo/vector-icons';
 import { getCurrDate, saveCurrMood } from "../components/SaveMenage"
 
 export default function TabOneScreen(props: { tabView: boolean; toggleNavBar: Function; }) {
-  const toggle = (e) => {
+  const toggle = (e: string) => {
     props.toggleNavBar(e);
   }
   return (
+
     <View>
       <BasicContainer content={<MoodCart tabView={props.tabView} toggleNavBar={toggle} />} />
       <BasicContainer content={<CourseSummaryCard />} />
