@@ -1,46 +1,46 @@
 export default [
     {
         id: "23gsf-4yg58-94d6y",
-        name: "Przykładowy kurs 1",
-        type: "kurs podstawowy",
+        name: "Początki medytacji",
+        type: "kurs wstępny",
         description: "Lorem Ipsum Dolor i jedą kurczaki z Olą",
         imgPath: "/path.jpg",
         episode: [
             {
                 id: "0",
-                title: "Title Lorem",
-                duration: "24:53",
+                title: "Wstęp",
+                duration: '2:43',
                 description: "Lorem Ipsum Dolor i jedą kurczaki z Olą",
                 trackUrl: "/url.mp3",
                 trackPath: "/path.mp3"
             },
             {
                 id: "1",
-                title: "Title Ipsum",
-                duration: "24:53",
+                title: "Pierwsze kroki",
+                duration: "10:20",
                 description: "Lorem Ipsum Dolor i jedą kurczaki z Olą",
                 trackUrl: "/url.mp3",
                 trackPath: "/path.mp3"
             },
             {
                 id: "2",
-                title: "Title ",
-                duration: "24:53",
+                title: "Przygotowanie techniczne",
+                duration: "5:43",
                 description: "Lorem Ipsum Dolor i jedą kurczaki z Olą",
                 trackUrl: "/url.mp3",
                 trackPath: "/path.mp3"
             },
             {
                 id: "3",
-                title: "Title",
-                duration: "24:53",
+                title: "Muzyka i otoczenie",
+                duration: "6:02",
                 description: "Lorem Ipsum Dolor i jedą kurczaki z Olą",
                 trackUrl: "/url.mp3",
                 trackPath: "/path.mp3"
             },
             {
                 id: "4",
-                title: "Title",
+                title: "Merytoryka",
                 duration: "24:53",
                 description: "Lorem Ipsum Dolor i jedą kurczaki z Olą",
                 trackUrl: "/url.mp3",
@@ -48,8 +48,8 @@ export default [
             },
             {
                 id: "5",
-                title: "Title",
-                duration: "24:53",
+                title: "Pierwsza medytacja",
+                duration: "30:00",
                 description: "Lorem Ipsum Dolor i jedą kurczaki z Olą",
                 trackUrl: "/url.mp3",
                 trackPath: "/path.mp3"

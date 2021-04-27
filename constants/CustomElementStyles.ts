@@ -1,5 +1,5 @@
 import Colors from './Colors';
-import { StyleSheet } from 'react-native';
+import { ImageBackgroundBase, StyleSheet } from 'react-native';
 
 const CustomElementStyles = StyleSheet.create({
     navbar: {
@@ -119,7 +119,23 @@ const CustomElementStyles = StyleSheet.create({
         fontFamily: "Poppins_400Regular",
         color: "#8D9199",
         letterSpacing: .40,
-    }
+    },
+    spacer: {
+        height: 1,
+        width: "100%",
+        backgroundColor: Colors.text,
+        opacity: .5,
+        marginBottom: 4,
+        marginTop: 20
+    },
+    courseDescription: {
+        fontSize: 15,
+        fontFamily: "Poppins_400Regular",
+        color: Colors.whiteOff,
+        opacity: .85,
+        letterSpacing: .40,
+        marginTop: 15
+    },
 });
 
 export default CustomElementStyles;
