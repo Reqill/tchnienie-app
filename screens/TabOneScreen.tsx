@@ -41,6 +41,7 @@ const MoodCart = (props: { tabView: boolean; toggleNavBar: Function }) => {
 
   const toggleLog = () => {
     setShowWholeLog(true);
+    setExpanded(false);
     props.toggleNavBar("TOGGLE_MOOD_LOG");
   }
 
@@ -114,7 +115,7 @@ const CourseSummaryCard = () => {
 const VideosSummaryCard = () => {
   return (
     <View style={CustomElementStyles.mainHeader}>
-      <Text style={CustomElementStyles.mainHeaderText}>Twoje wykłady</Text>
+      <Text style={CustomElementStyles.mainHeaderText}>Twoja muzyka</Text>
     </View>
   );
 }

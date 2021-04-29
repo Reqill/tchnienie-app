@@ -8,15 +8,18 @@ import CourseList from "../constants/CourseList";
 import { Feather } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default function TabTwoScreen() {
+
+export default function TabTwoScreen(props: { toggleNavBar: Function }) {
 
     const generateCourseList = () => {
-        return CourseList.map((el, i) => <CourseCard item={el} key={el.id} />)
+        return CourseList.map((el, i) => <CourseCard item={el} key={el.id} courseIdx={i} toggleNavBar={props.toggleNavBar} />)
     }
+
 
     return (
         <View style={styles.container}>
             {generateCourseList()}
+            <View style={{ height: 85 }} />
         </View>
     );
 }
@@ -25,7 +28,7 @@ function Icon(props: { name: React.ComponentProps<typeof Feather>['name']; color
     return <Feather style={{ marginTop: .5 }}{...props} />;
 }
 
-const EpisodeElement = (props: { elementData, info, idx, storeKey, unlockEpisode: Function }) => {
+const EpisodeElement = (props: { elementData, info, idx, storeKey, courseIdx: number, unlockEpisode: Function, toggleNavBar: Function }) => {
     const {
         id,
         title,
@@ -54,7 +57,7 @@ const EpisodeElement = (props: { elementData, info, idx, storeKey, unlockEpisode
             if (watchedEpisodes === idx) {
                 watchedEpisode(idx)
             }
-            //start playing episode
+            props.toggleNavBar("TOGGLE_COURSE", ["COURSE", props.courseIdx, idx])
         } else {
             // console.log("MUSISZ OBEJRZEĆ POPRZEDNIE ABY ROZPOCZĄĆ KOLEJNY")
         }
@@ -66,8 +69,14 @@ const EpisodeElement = (props: { elementData, info, idx, storeKey, unlockEpisode
             paddingVertical: 8, paddingHorizontal: 2.5, opacity: (watchedEpisodes >= idx) ? 1 : .45
         }}>
             <View>
-                <Text style={{ fontSize: 16, fontFamily: "Poppins_400Regular", color: Colors.whiteOff, letterSpacing: .25 }}>{id}. {title}</Text>
-                <Text style={{ fontSize: 14, marginTop: -4, fontFamily: "Poppins_400Regular", color: Colors.whiteOff, opacity: .45 }}>{duration} min</Text>
+                <Text numberOfLines={1} style={{ fontSize: 16, fontFamily: "Poppins_400Regular", color: Colors.whiteOff, letterSpacing: .25 }}>{id}. {title}</Text>
+                <View>
+                    <View style={{ flex: 1, flexDirection: "row", }}>
+                        <Icon name="clock" size={13} color={Colors.other} style={{ marginTop: -.5 }} />
+                        <Text numberOfLines={1} style={{ fontSize: 14, marginTop: -4, fontFamily: "Poppins_400Regular", color: Colors.whiteOff, opacity: .45 }}> {duration} <Text style={{ fontSize: 13 }}>min</Text></Text>
+                    </View>
+                </View>
+
             </View>
             <TouchableOpacity style={{ marginRight: -5 }} onPress={() => startEpisode()} activeOpacity={(watchedEpisodes >= idx) ? .2 : 1}>
                 <View style={{ flex: 1, flexDirection: "row", alignItems: "center", opacity: .85 }}>
@@ -115,7 +124,7 @@ const storeCourseInfo = async (storageKey: string, value: JSON | Array<any>) => 
     }
 }
 
-const CourseCard = (props: any) => {
+const CourseCard = (props: { item: any, courseIdx: any, toggleNavBar: Function }) => {
     const [expanded, setExpanded] = useState(false)
     const [courseInfo, setCourseInfo] = useState(null);
     const {
@@ -127,9 +136,24 @@ const CourseCard = (props: any) => {
         id
     } = props.item;
     const key = `course-${name}-${id}`
+    const courseIdx = props.courseIdx;
 
     const generateEpisodes = (info) => {
-        return episode.map((el, i) => <EpisodeElement elementData={el} key={`${i}${el.title}`} info={info} idx={i} storeKey={key} unlockEpisode={unlockEpisode} />)
+        return episode.map((el, i) => <EpisodeElement elementData={el} key={`${i}${el.title}`} info={info} idx={i} courseIdx={courseIdx} storeKey={key} unlockEpisode={unlockEpisode} toggleNavBar={handleChange} />)
+    }
+
+    const handleChange = useCallback((e, path) => {
+        setExpanded(false);
+        props.toggleNavBar(e, path)
+    }, [])
+
+    const likeCourse = () => {
+        let tmp = courseInfo;
+        tmp.isLiked = !courseInfo.isLiked;
+        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+        setCourseInfo(tmp);
+        setExpanded(false);
+        storeCourseInfo(key, tmp)
     }
 
     const unlockEpisode = useCallback((index) => {
@@ -137,11 +161,11 @@ const CourseCard = (props: any) => {
         tmp.watchedEpisodes = index + 1;
         setCourseInfo(tmp);
         storeCourseInfo(key, tmp);
-        getCourseInfo(key).then((res) => console.log(res))
+        // getCourseInfo(key).then((res) => console.log(res))
     }, [courseInfo])
 
     if (courseInfo === null) {
-        getCourseInfo(key).then((res) => setCourseInfo(res))
+        getCourseInfo(key).then((res) => { setCourseInfo(res) })
         return null;
     } else {
         return (
@@ -152,25 +176,42 @@ const CourseCard = (props: any) => {
                     }}>
                         <View style={{ width: 62, height: 62, borderRadius: 10 }}>
                             <Image source={{ uri: imgPath }} style={{ width: 62, height: 62, borderRadius: 10 }} />
+                            <View style={{ height: courseInfo.isLiked ? null : 0, overflow: 'hidden', flex: 1, flexDirection: "row", flexWrap: "wrap", zIndex: 99, position: "absolute", right: -7, bottom: -7, width: 28 }}>
+                                <View style={[CustomElementStyles.infoIcon, { backgroundColor: Colors.pinkAccent }]}>
+                                    <Icon name="heart" size={18} color={Colors.whiteOff} />
+                                </View>
+                            </View>
+                            <View style={{ height: expanded ? null : 0, overflow: 'hidden', flex: 1, flexDirection: "row", flexWrap: "wrap", zIndex: 98, position: "absolute", top: 0 }}>
+                                <View
+                                    style={{
+                                        width: 62, height: 62, borderRadius: 10, backgroundColor: "rgba(0,0,0,.25)",
+                                        flex: 1, alignItems: "center", justifyContent: "center"
+                                    }}>
+                                    <TouchableOpacity style={{ width: "100%", height: "100%", flex: 1, alignItems: "center", justifyContent: "center" }} onPress={() => likeCourse()}>
+                                        <Icon name="heart" size={30} color={courseInfo.isLiked ? Colors.pinkAccent : Colors.whiteOff} />
+                                    </TouchableOpacity>
+
+                                </View>
+                            </View>
                         </View>
                         <View style={{ width: "90%", paddingLeft: 13, flex: 1, justifyContent: "center", flexDirection: "column", height: "100%" }}>
                             <View style={{ marginBottom: -4 }}>
-                                <Text style={CustomElementStyles.courseHeader}>{name}</Text>
+                                <Text numberOfLines={1} style={CustomElementStyles.courseHeader}>{name}</Text>
                             </View>
 
                             <View style={{ width: "100%" }}>
                                 <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between" }}>
                                     <View>
-                                        <Text style={CustomElementStyles.courseOther}>
+                                        <Text numberOfLines={1} style={CustomElementStyles.courseOther}>
                                             {type}
                                         </Text>
                                     </View>
                                     <View >
                                         <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between", marginRight: -10 }}>
+                                            <Icon name="headphones" size={13} color={Colors.other} style={{ marginTop: 3 }} />
                                             <View>
-                                                <Text style={CustomElementStyles.courseOther}>
-                                                    {courseInfo.watchedEpisodes}/{episode.length}{" "}
-
+                                                <Text numberOfLines={1} style={CustomElementStyles.courseOther}>
+                                                    {" "}{courseInfo.watchedEpisodes}/{episode.length}{" "}
                                                 </Text>
                                             </View>
                                             <View>

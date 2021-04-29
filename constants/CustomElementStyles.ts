@@ -117,7 +117,7 @@ const CustomElementStyles = StyleSheet.create({
     courseOther: {
         fontSize: 14,
         fontFamily: "Poppins_400Regular",
-        color: "#8D9199",
+        color: Colors.other,
         letterSpacing: .40,
     },
     spacer: {
@@ -136,6 +136,78 @@ const CustomElementStyles = StyleSheet.create({
         letterSpacing: .40,
         marginTop: 15
     },
+    basicContainer20: {
+        flex: 1,
+        flexDirection: 'column',
+        width: "100%",
+        alignItems: 'center',
+        justifyContent: 'space-around',
+        borderRadius: 12.5,
+        flexWrap: "wrap",
+        // borderColor: Colors.border,
+        // borderWidth: 1.8,
+        zIndex: 90,
+        opacity: .95,
+        padding: 0,
+        margin: 0,
+        // paddingVertical: 30,
+        shadowColor: "rgba(0,0,0,0.15)",
+        shadowOffset: {
+            width: 0,
+            height: 3,
+        },
+        height: "auto",
+        shadowOpacity: 0.05,
+        shadowRadius: 4.65,
+        elevation: 6,
+    },
+    musicContainer: {
+        // flex: 1,
+        // flexDirection: "column",
+        // flexWrap: "wrap",
+        // alignItems: "center",
+        // justifyContent: "space-around",
+        width: "100%",
+        marginBottom: -8,
+        padding: 2
+    },
+    musicTitleCard: {
+        fontSize: 16,
+        fontFamily: "Poppins_500Medium",
+        color: Colors.whiteOff,
+        opacity: 1,
+        letterSpacing: .2,
+        marginTop: 7,
+        height: 30,
+    },
+    borderFix20: {
+        borderColor: Colors.border,
+        borderWidth: 1.8,
+        borderRadius: 12.5,
+        width: "100%",
+        height: "100%",
+        paddingTop: 12,
+        paddingBottom: 16,
+        paddingHorizontal: 12,
+        // flex: 1,
+        // justifyContent: "center",
+        // alignItems: "center",
+    },
+    musicOther: {
+        fontSize: 14,
+        fontFamily: "Poppins_400Regular",
+        color: "#8D9199",
+        letterSpacing: .40,
+        marginTop: -8
+    },
+    infoIcon: {
+        padding: 5,
+        paddingBottom: 4,
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        borderRadius: 20
+    }
 });
 
 export default CustomElementStyles;

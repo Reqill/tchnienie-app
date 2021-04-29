@@ -16,6 +16,7 @@ import { throwIfAudioIsDisabled } from 'expo-av/build/Audio/AudioAvailability';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import MoodLog from '../screens/MoodLog';
 import Settings from '../screens/Settings'
+import AudioPlayer from "../screens/AudioPlayer"
 
 
 const getJSONData = async (storageKey: string) => {
@@ -39,6 +40,8 @@ interface IState {
     activeMoodLog: boolean;
     moodLog: JSX.Element;
     activeSettings: boolean;
+    activeCourse: boolean;
+    activeAudio: Array<any>
 }
 
 function Icon(props: { name: React.ComponentProps<typeof Feather>['name']; color: string }) {
@@ -60,6 +63,8 @@ export default class NavigationHandler extends React.Component<IProps, IState> {
             navBarVisible: true,
             activeMoodLog: false,
             activeSettings: false,
+            activeCourse: false,
+            activeAudio: [],
         };
         this.changeTabIdx = this.changeTabIdx.bind(this)
         this.toggleNavBar = this.toggleNavBar.bind(this)
@@ -68,7 +73,7 @@ export default class NavigationHandler extends React.Component<IProps, IState> {
         }
     }
 
-    toggleNavBar = (e?: any) => {
+    toggleNavBar = (e?: any, audioPath?: Array<any>) => {
         if (e === "TOGGLE_MOOD_LOG") {
             this.setState({ activeMoodLog: true })
             let foo: any = [];
@@ -89,6 +94,11 @@ export default class NavigationHandler extends React.Component<IProps, IState> {
                 }
             })
         }
+        if (e === "TOGGLE_COURSE") {
+            this.setState({ activeCourse: true })
+            this.setState({ activeAudio: audioPath })
+        }
+
         if (e !== "TOGGLE_SETTINGS") {
             this.setState({ navBarVisible: !this.state.navBarVisible }, () => {
                 if (!this.state.navBarVisible) {
@@ -101,6 +111,7 @@ export default class NavigationHandler extends React.Component<IProps, IState> {
                 } else {
                     this.setState({ activeMoodLog: false })
                     this.setState({ activeSettings: false })
+                    this.setState({ activeCourse: false })
                     this.setState({ backBtn: <View /> })
                 }
             })
@@ -115,10 +126,12 @@ export default class NavigationHandler extends React.Component<IProps, IState> {
                 this.setState({ activeMoodLog: false })
                 this.setState({ activeSettings: true })
                 this.setState({ navBarVisible: false })
+                this.setState({ activeCourse: false })
             } else {
                 this.setState({ activeSettings: false })
                 this.setState({ activeMoodLog: false })
                 this.setState({ navBarVisible: true })
+                this.setState({ activeCourse: false })
                 this.setState({ backBtn: <View /> })
             }
 
@@ -128,8 +141,8 @@ export default class NavigationHandler extends React.Component<IProps, IState> {
     changeTabIdx = (idx: number, component: boolean) => {
         const screens = [
             <TabOneScreen tabView={this.state.navBarVisible} toggleNavBar={this.toggleNavBar} />,
-            <TabTwoScreen tabView={this.state.navBarVisible} active={this.state.activeTabIdx} />,
-            <TabThreeScreen tabView={this.state.navBarVisible} />,
+            <TabTwoScreen tabView={this.state.navBarVisible} active={this.state.activeTabIdx} toggleNavBar={this.toggleNavBar} />,
+            <TabThreeScreen tabView={this.state.navBarVisible} toggleNavBar={this.toggleNavBar} />,
             // <TabFourScreen tabView={this.state.navBarVisible} />
         ]
         LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
@@ -149,8 +162,8 @@ export default class NavigationHandler extends React.Component<IProps, IState> {
     backAction = () => {
         const screens = [
             <TabOneScreen tabView={this.state.navBarVisible} toggleNavBar={this.toggleNavBar} />,
-            <TabTwoScreen active={this.state.activeTabIdx} />,
-            <TabThreeScreen />,
+            <TabTwoScreen active={this.state.activeTabIdx} toggleNavBar={this.toggleNavBar} />,
+            <TabThreeScreen toggleNavBar={this.toggleNavBar} />,
             // <TabFourScreen />
         ]
 
@@ -237,6 +250,9 @@ export default class NavigationHandler extends React.Component<IProps, IState> {
                         </View>
                         <View style={[styles.hiddenScreen, { height: this.state.activeSettings ? "100%" : "0%", }]}>
                             <Settings />
+                        </View>
+                        <View style={[styles.hiddenScreen, { height: this.state.activeCourse ? "100%" : "0%", }]}>
+                            <AudioPlayer activeAudio={this.state.activeAudio} />
                         </View>
                     </View>
                     <LinearGradient

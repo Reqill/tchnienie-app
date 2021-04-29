@@ -18,5 +18,5 @@ export default {
   fade: "55%",
   border: "rgba(61, 63, 79, .45)",
   borderTwo: "rgba(66, 68, 86, .7)",
-  other: "#8D9198"
+  other: "#8D9198",
 };

@@ -1,0 +1,51 @@
+export default [
+    {
+        id: "2342-sdf-32ad",
+        title: "Sample Audio 0",
+        duration: "0:57",
+        imgPath: "https://i.imgur.com/IXkTBn8.png",
+        trackPath: "",
+    },
+    {
+        id: "2fd2-sdf-3fds",
+        title: "Sample Audio 1",
+        duration: "3:02",
+        imgPath: "https://i.imgur.com/IXkTBn8.png",
+        trackPath: "",
+    },
+    {
+        id: "2342-s2df-32ad",
+        title: "Sample Audio 2",
+        duration: "21:37",
+        imgPath: "https://i.imgur.com/IXkTBn8.png",
+        trackPath: "",
+    },
+    {
+        id: "vsd42-sdf-32ad",
+        title: "Sample Audio 3",
+        duration: "2:50",
+        imgPath: "https://i.imgur.com/IXkTBn8.png",
+        trackPath: "",
+    },
+    {
+        id: "2342-sdf-31223ad",
+        title: "Sample Audio 4",
+        duration: "9:08",
+        imgPath: "https://i.imgur.com/IXkTBn8.png",
+        trackPath: "",
+    },
+    {
+        id: "2vx2-sdf-32ad",
+        title: "Sample Audio 5",
+        duration: "15:38",
+        imgPath: "https://i.imgur.com/IXkTBn8.png",
+        trackPath: "",
+    },
+    {
+        id: "2vx2-f34f-32ad",
+        title: "Sample Audio 6",
+        duration: "6:59",
+        imgPath: "https://i.imgur.com/IXkTBn8.png",
+        trackPath: "",
+    },
+]
