@@ -10,7 +10,7 @@
     "splash": {
       "image": "./assets/images/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#212633"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -24,15 +24,16 @@
         "UIBackgroundModes": [
           "audio"
         ]
-      },
-      "android": {
-        "adaptiveIcon": {
-          "foregroundImage": "./assets/images/adaptive-icon.png",
-          "backgroundColor": "#ffffff"
-        }
-      },
-      "web": {
-        "favicon": "./assets/images/favicon.png"
       }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "backgroundColor": "#64DBFF"
+      }
+    },
+    "web": {
+      "favicon": "./assets/images/favicon.png"
     }
   }
+}
