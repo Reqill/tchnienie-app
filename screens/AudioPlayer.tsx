@@ -25,7 +25,7 @@ export default function Settings(props) {
 
         setSound(sound);
 
-        console.log('Playing Sound');
+        // console.log('Playing Sound');
         await sound.playAsync();
     }
 
@@ -33,7 +33,7 @@ export default function Settings(props) {
         setPlayingType(props.activeAudio[0])
         return sound
             ? () => {
-                console.log('Unloading Sound');
+                // console.log('Unloading Sound');
                 sound.unloadAsync();
             }
             : undefined;

@@ -7,7 +7,7 @@ import Colors from "../constants/Colors"
 
 export default function MoodLog(props: any) {
     const MoodCart = () => {
-        console.log()
+        // console.log()
         return (
             <View style={{ marginBottom: -10 }}>
                 <View style={CustomElementStyles.mainHeader}>

@@ -12,6 +12,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#212633"
     },
+    "sdkVersion": "41.0.0",
     "updates": {
       "fallbackToCacheTimeout": 0
     },
@@ -30,7 +31,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#64DBFF"
-      }
+      },
+      "package": "com.reqill.tchnienie"
     },
     "web": {
       "favicon": "./assets/images/favicon.png"

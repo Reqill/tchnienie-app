@@ -66,7 +66,7 @@ const MusicCard = (props: { item: any; musicIdx: any; toggleNavBar: Function }) 
         setExpanded(false);
         props.toggleNavBar(e, path)
     }
-    console.log(isLiked)
+    // console.log(isLiked)
 
     const likeMusic = () => {
         storeCourseInfo(key, { isLiked: !isLiked })
