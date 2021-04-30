@@ -30,7 +30,7 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#64DBFF"
+        "backgroundColor": "#212633"
       },
       "package": "com.reqill.tchnienie"
     },
