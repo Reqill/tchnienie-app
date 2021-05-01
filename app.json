@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "tchnienie-app-expo",
-    "slug": "tchnienie-app-expo",
-    "version": "1.0.0",
+    "name": "tchnienie",
+    "slug": "tchnienie",
+    "version": "0.8.2",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
