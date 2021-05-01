@@ -11,17 +11,18 @@ import { Feather } from '@expo/vector-icons';
 import { getCurrDate, saveCurrMood } from "../components/SaveMenage"
 import CourseList from "../constants/CourseList";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import MusicList from "../constants/MusicList";
 
 export default function TabOneScreen(props: { tabView: boolean; toggleNavBar: Function; changeTab: Function }) {
-  const toggle = (e: string) => {
+  const toggle = useCallback((e: string) => {
     props.toggleNavBar(e);
-  }
-  return (
+  }, [])
 
+  return (
     <View>
       <BasicContainer content={<MoodCart tabView={props.tabView} toggleNavBar={toggle} />} />
       <BasicContainer content={<CourseSummaryCard changeTab={props.changeTab} />} />
-      <BasicContainer content={<MusicSummaryCard changeTab={props.changeTab} />} />
+      <BasicContainer content={<MusicSummaryCard changeTab={props.changeTab} navBarAction={props.toggleNavBar} />} />
       <BasicContainer content={<StatsCard />} />
       <View style={{ height: 85 }} />
     </View>
@@ -115,15 +116,17 @@ const CourseSummaryCard = (props: { changeTab: Function }) => {
   const [visibleCourses, setVisibleCourses] = useState(0);
 
   const generateShortCourseList = () => {
-    return CourseList.map((el, i) => <CourseCard item={el} key={el.id} courseIdx={i} handleChange={props.changeTab} ruleTheWorld={handleRulingTheWorld} />)
+    return CourseList.map((el, i) => <CourseCard item={el} key={el.id} courseIdx={i} handleChange={props.changeTab} ruleTheWorld={handleRulingTheWorld} targetPage={1} />)
   }
 
   const handleRulingTheWorld = useCallback((e) => {
     setVisibleCourses(visibleCourses + e)
   }, []);
 
-  const returnButton = () => {
-    return (
+  return (
+    <View style={CustomElementStyles.mainHeader}>
+      <Text style={CustomElementStyles.mainHeaderText}>Twoje kursy</Text>
+      {generateShortCourseList()}
       <View style={{ flex: 1, flexDirection: "row", marginTop: 12 }}>
         <TouchableOpacity onPress={() => props.changeTab(1)}>
           <View style={CustomElementStyles.mainButton}>
@@ -148,22 +151,9 @@ const CourseSummaryCard = (props: { changeTab: Function }) => {
           </TouchableOpacity>
         </View>
       </View>
-    );
-  }
-
-  return (
-    <View style={CustomElementStyles.mainHeader}>
-      <Text style={CustomElementStyles.mainHeaderText}>Twoje kursy</Text>
-      {generateShortCourseList()}
-      {returnButton()}
     </View>
   );
 }
-
-
-/*
-  ZW ide pić i do kibla
-*/
 
 
 const getCourseInfo = async (storageKey: string) => {
@@ -175,7 +165,7 @@ const getCourseInfo = async (storageKey: string) => {
   }
 }
 
-const CourseCard = (props: { item: any, courseIdx: any, handleChange: Function, ruleTheWorld: Function }) => {
+const CourseCard = (props: { item: any, courseIdx: any, handleChange: Function, ruleTheWorld: Function, targetPage: number }) => {
   const [courseInfo, setCourseInfo] = useState(null);
   const {
     name,
@@ -196,7 +186,7 @@ const CourseCard = (props: { item: any, courseIdx: any, handleChange: Function, 
   } else {
     props.ruleTheWorld(1);
     return (
-      <TouchableOpacity activeOpacity={.55} onPress={() => props.handleChange(1)} style={{ marginTop: 7, marginBottom: 13 }}>
+      <TouchableOpacity activeOpacity={.55} onPress={() => props.handleChange(props.targetPage)} style={{ marginTop: 7, marginBottom: 13 }}>
         <View style={CustomElementStyles.courseContainer} activeOpacity={1} >
           <View style={{ width: 62, height: 62, borderRadius: 10 }}>
             <Image source={{ uri: imgPath }} style={{ width: 62, height: 62, borderRadius: 10 }} />
@@ -236,51 +226,107 @@ const CourseCard = (props: { item: any, courseIdx: any, handleChange: Function, 
   }
 }
 
+const MusicCard = (props: { item: any, musicIdx: any, handleChange: Function, ruleTheWorld: Function, targetPage: number }) => {
+  const [courseInfo, setCourseInfo] = useState(null);
+  const {
+    title,
+    imgPath,
+    id,
+    duration,
+    author
+  } = props.item;
+  const key = `music-${title}-${id}`
+  const musicIdx = props.musicIdx;
 
-
-const MusicSummaryCard = (props: { changeTab: Function }) => {
-  const [areCourses, setAreCourses] = useState(false);
-
-  const setView = (view: boolean) => {
-    if (view) {
-      return (
-        <Text>LISTA AKTYWNYCH KURSÓW</Text>
-      );
-    } else {
-      return (
-        <View style={{ flex: 1, flexDirection: "row", marginTop: 8 }}>
-          <TouchableOpacity onPress={() => props.changeTab(2)}>
-            <View style={CustomElementStyles.mainButton}>
-              <Icon name="plus" size={31} color={Colors.tintColor} />
+  if (courseInfo === null) {
+    getCourseInfo(key).then((res) => { setCourseInfo(res) })
+    return null;
+  } if (courseInfo.isLiked === false) {
+    return null
+  } else {
+    props.ruleTheWorld(1);
+    return (
+      <TouchableOpacity activeOpacity={.55} onPress={() => props.handleChange("TOGGLE_COURSE", ["MUSIC", musicIdx])} style={{ marginTop: 7, marginBottom: 13 }}>
+        <View style={CustomElementStyles.courseContainer} activeOpacity={1} >
+          <View style={{ width: 62, height: 62, borderRadius: 10 }}>
+            <Image source={{ uri: imgPath }} style={{ width: 62, height: 62, borderRadius: 10 }} />
+            <View style={{ height: courseInfo.isLiked ? null : 0, overflow: 'hidden', flex: 1, flexDirection: "row", flexWrap: "wrap", zIndex: 99, position: "absolute", right: -7, bottom: -7, width: 28 }}>
+              <View style={[CustomElementStyles.infoIcon, { backgroundColor: Colors.pinkAccent }]}>
+                <Icon name="heart" size={18} color={Colors.whiteOff} />
+              </View>
             </View>
-          </TouchableOpacity>
-          <View style={{
-            marginLeft: 15, flex: 1, flexDirection: "column",
-            justifyContent: "center"
-          }}>
-            <Text numberOfLines={1}
-              style={CustomElementStyles.mainIndicator}
-            >
-              Trochę tutaj pusto...
-              </Text>
-            <TouchableOpacity onPress={() => props.changeTab(2)}>
-              <Text numberOfLines={1}
-                style={CustomElementStyles.mainCTA}
-              >
-                ruchanie
-              </Text>
-            </TouchableOpacity>
           </View>
-        </View>
-      );
-    }
+          <View style={{ width: "90%", paddingLeft: 13, flex: 1, justifyContent: "center", flexDirection: "column", height: "100%" }}>
+            <View style={{ marginBottom: -4 }}>
+              <Text numberOfLines={1} style={CustomElementStyles.courseHeader}>{title}</Text>
+            </View>
+            <View style={{ width: "100%" }}>
+              <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between" }}>
+                <View>
+                  <Text numberOfLines={1} style={CustomElementStyles.courseOther}>
+                    {author}
+                  </Text>
+                </View>
+                <View >
+                  <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between", marginRight: -10 }}>
+                    <Icon name="clock" size={13} color={Colors.other} style={{ marginTop: 3.5 }} />
+                    <View>
+                      <Text numberOfLines={1} style={CustomElementStyles.courseOther}>
+                        {" "}{duration}
+                      </Text>
+                    </View>
+                  </View>
+                </View>
+              </View>
+            </View>
+          </View>
+        </View >
+      </TouchableOpacity>
+    );
+  }
+}
+
+
+
+const MusicSummaryCard = (props: { changeTab: Function, navBarAction: Function }) => {
+  const [visibleCourses, setVisibleCourses] = useState(0);
+
+  const generateShortCourseList = () => {
+    return MusicList.map((el, i) => <MusicCard item={el} key={el.id} musicIdx={i} handleChange={props.navBarAction} ruleTheWorld={handleRulingTheWorld} targetPage={2} />)
   }
 
+  const handleRulingTheWorld = useCallback((e) => {
+    setVisibleCourses(visibleCourses + e)
+  }, []);
 
   return (
     <View style={CustomElementStyles.mainHeader}>
       <Text style={CustomElementStyles.mainHeaderText}>Twoja muzyka</Text>
-      {setView(areCourses)}
+      {generateShortCourseList()}
+      <View style={{ flex: 1, flexDirection: "row", marginTop: 12 }}>
+        <TouchableOpacity onPress={() => props.changeTab(2)}>
+          <View style={CustomElementStyles.mainButton}>
+            <Icon name="plus" size={31} color={Colors.tintColor} />
+          </View>
+        </TouchableOpacity>
+        <View style={{
+          marginLeft: 15, flex: 1, flexDirection: "column",
+          justifyContent: "center"
+        }}>
+          <Text numberOfLines={1}
+            style={CustomElementStyles.mainIndicator}
+          >
+            {(visibleCourses > 0) ? "Czujesz niedosyt?" : "Trochę tutaj pusto..."}
+          </Text>
+          <TouchableOpacity onPress={() => props.changeTab(2)}>
+            <Text numberOfLines={1}
+              style={CustomElementStyles.mainCTA}
+            >
+              {(visibleCourses > 0) ? "Odkryj kolejny utwór!" : "Odkryj pierwszy utwór!"}
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </View>
     </View>
   );
 }
