@@ -5,6 +5,7 @@ export default [
         duration: "0:57",
         imgPath: "https://i.imgur.com/IXkTBn8.png",
         trackPath: "",
+        author: "Ja",
     },
     {
         id: "2fd2-sdf-3fds",
@@ -12,6 +13,7 @@ export default [
         duration: "3:02",
         imgPath: "https://i.imgur.com/IXkTBn8.png",
         trackPath: "",
+        author: "Ja",
     },
     {
         id: "2342-s2df-32ad",
@@ -19,6 +21,7 @@ export default [
         duration: "21:37",
         imgPath: "https://i.imgur.com/IXkTBn8.png",
         trackPath: "",
+        author: "Ja",
     },
     {
         id: "vsd42-sdf-32ad",
@@ -26,6 +29,7 @@ export default [
         duration: "2:50",
         imgPath: "https://i.imgur.com/IXkTBn8.png",
         trackPath: "",
+        author: "Ja",
     },
     {
         id: "2342-sdf-31223ad",
@@ -33,6 +37,7 @@ export default [
         duration: "9:08",
         imgPath: "https://i.imgur.com/IXkTBn8.png",
         trackPath: "",
+        author: "Ja",
     },
     {
         id: "2vx2-sdf-32ad",
@@ -40,6 +45,7 @@ export default [
         duration: "15:38",
         imgPath: "https://i.imgur.com/IXkTBn8.png",
         trackPath: "",
+        author: "Ja",
     },
     {
         id: "2vx2-f34f-32ad",
@@ -47,5 +53,6 @@ export default [
         duration: "6:59",
         imgPath: "https://i.imgur.com/IXkTBn8.png",
         trackPath: "",
+        author: "Ja",
     },
 ]
