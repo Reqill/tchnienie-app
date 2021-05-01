@@ -55,7 +55,7 @@ export default class NavigationHandler extends React.Component<IProps, IState> {
         super(props);
         this.state = {
             activeTabIdx: 0,
-            activityDaysInRow: 2,
+            activityDaysInRow: 69, //TODO: check from app memory/load, and increment idx on audio play on each day 
             currentScreen: <TabOneScreen />,
             moodLog: <View />,
             backBtn: <View />,
@@ -138,9 +138,9 @@ export default class NavigationHandler extends React.Component<IProps, IState> {
         }
     }
 
-    changeTabIdx = (idx: number, component: boolean) => {
+    changeTabIdx = (idx: number) => {
         const screens = [
-            <TabOneScreen tabView={this.state.navBarVisible} toggleNavBar={this.toggleNavBar} />,
+            <TabOneScreen tabView={this.state.navBarVisible} toggleNavBar={this.toggleNavBar} changeTab={this.changeTabIdx} />,
             <TabTwoScreen tabView={this.state.navBarVisible} active={this.state.activeTabIdx} toggleNavBar={this.toggleNavBar} />,
             <TabThreeScreen tabView={this.state.navBarVisible} toggleNavBar={this.toggleNavBar} />,
             // <TabFourScreen tabView={this.state.navBarVisible} />
@@ -161,7 +161,7 @@ export default class NavigationHandler extends React.Component<IProps, IState> {
 
     backAction = () => {
         const screens = [
-            <TabOneScreen tabView={this.state.navBarVisible} toggleNavBar={this.toggleNavBar} />,
+            <TabOneScreen tabView={this.state.navBarVisible} toggleNavBar={this.toggleNavBar} changeTab={this.changeTabIdx} />,
             <TabTwoScreen active={this.state.activeTabIdx} toggleNavBar={this.toggleNavBar} />,
             <TabThreeScreen toggleNavBar={this.toggleNavBar} />,
             // <TabFourScreen />

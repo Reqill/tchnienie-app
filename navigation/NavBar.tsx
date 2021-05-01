@@ -13,61 +13,32 @@ function ButtonIcon(props: { name: React.ComponentProps<typeof Feather>['name'];
 }
 
 export default function NavBar(props: { visible: Boolean; changeTabIdx: Function; activeIdx: Number }) {
-    // const navigation = useNavigation();
+
     const [active, setActive] = useState(props.activeIdx)
     const colors = [Colors.tintColor, Colors.whiteOff];
-    // const [opacity, setOpacity] = useState((new Animated.Value(0)))
-    // const tabs = ["TabOne", "TabTwo", "TabThree", "TabFour"]
 
-    // let route = useRoute()
-    // console.log(route.name)
     if (Platform.OS === 'android') {
         UIManager.setLayoutAnimationEnabledExperimental(true);
     }
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-    // const _start = () => {
-    //     Animated.timing(opacity, {
-    //         toValue: 1,
-    //         duration: 1000,
-    //         useNativeDriver: true
-    //     }).start();
-    // };
 
     const changeColor = (idx: number) => {
         setActive(idx)
-        // console.log(idx)
-        // navigation.navigate(tabs[idx])
+        // console.log(props.activeIdx)
+        if (idx !== props.activeIdx) {
+            props.changeTabIdx(idx)
+        }
+        // console.log(`without sync: ${active}`)
     }
-
-    useEffect(() => {
-
-        props.changeTabIdx(active);
-
-    }, [active])
-    // _start();
 
     return (
         <View style={styles.center}>
-            {/* <Animated.View
-                style={{
-                    opacity: opacity,
-                    flex: 1,
-                    width: "100%",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    flexDirection: "row"
-                }}
-            > */}
             <LinearGradient
                 colors={[Colors.blueThree, Colors.blueFour]}
                 style={[CustomElementStyles.navbar, { marginBottom: (props.visible === true) ? 0 : -100 }]}
                 start={{ x: 0.44, y: -.2 }}
                 end={{ x: 0.56, y: 1.2 }}
             >
-
-                {/* <TouchableOpacity style={{ padding: 10 }} onPress={(e) => changeColor(1)}>
-                    <ButtonIcon name={"video"} color={props.activeIdx === 1 ? colors[0] : colors[1]} />
-                </TouchableOpacity> */}
                 <TouchableOpacity style={{ padding: 10 }} onPress={(e) => changeColor(2)}>
                     <ButtonIcon name={"headphones"} color={props.activeIdx === 2 ? colors[0] : colors[1]} />
                 </TouchableOpacity>
@@ -78,10 +49,7 @@ export default function NavBar(props: { visible: Boolean; changeTabIdx: Function
                     <ButtonIcon name={"list"} color={props.activeIdx === 1 ? colors[0] : colors[1]} />
                 </TouchableOpacity>
             </LinearGradient>
-            {/* </Animated.View> */}
-
         </View>
-
     );
 }
 

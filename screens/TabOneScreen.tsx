@@ -10,7 +10,7 @@ import EmotionIdx from "../constants/EmotionIdx"
 import { Feather } from '@expo/vector-icons';
 import { getCurrDate, saveCurrMood } from "../components/SaveMenage"
 
-export default function TabOneScreen(props: { tabView: boolean; toggleNavBar: Function; }) {
+export default function TabOneScreen(props: { tabView: boolean; toggleNavBar: Function; changeTab: Function }) {
   const toggle = (e: string) => {
     props.toggleNavBar(e);
   }
@@ -18,8 +18,8 @@ export default function TabOneScreen(props: { tabView: boolean; toggleNavBar: Fu
 
     <View>
       <BasicContainer content={<MoodCart tabView={props.tabView} toggleNavBar={toggle} />} />
-      <BasicContainer content={<CourseSummaryCard />} />
-      <BasicContainer content={<VideosSummaryCard />} />
+      <BasicContainer content={<CourseSummaryCard changeTab={props.changeTab} />} />
+      <BasicContainer content={<MusicSummaryCard changeTab={props.changeTab} />} />
       <BasicContainer content={<StatsCard />} />
       <View style={{ height: 85 }} />
     </View>
@@ -105,20 +105,112 @@ const MoodCart = (props: { tabView: boolean; toggleNavBar: Function }) => {
 
   );
 }
-const CourseSummaryCard = () => {
+
+
+
+
+const CourseSummaryCard = (props: { changeTab: Function }) => {
+  const [areCourses, setAreCourses] = useState(false);
+
+  const setView = (view: boolean) => {
+    if (view) {
+      return (
+        <Text>LISTA AKTYWNYCH KURSÓW</Text>
+      );
+    } else {
+      return (
+        <View style={{ flex: 1, flexDirection: "row", marginTop: 8 }}>
+          <TouchableOpacity onPress={() => props.changeTab(1)}>
+            <View style={CustomElementStyles.mainButton}>
+              <Icon name="plus" size={31} color={Colors.tintColor} />
+            </View>
+          </TouchableOpacity>
+          <View style={{
+            marginLeft: 15, flex: 1, flexDirection: "column",
+            justifyContent: "center"
+          }}>
+            <Text numberOfLines={1}
+              style={CustomElementStyles.mainIndicator}
+            >
+              Trochę tutaj pusto...
+              </Text>
+            <TouchableOpacity onPress={() => props.changeTab(1)}>
+              <Text numberOfLines={1}
+                style={CustomElementStyles.mainCTA}
+              >
+                Rozpocznij nowy kurs!
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      );
+    }
+  }
+
+  /*
+    ZW ide pić i do kibla
+  */
+
   return (
     <View style={CustomElementStyles.mainHeader}>
       <Text style={CustomElementStyles.mainHeaderText}>Twoje kursy</Text>
+      {setView(areCourses)}
     </View>
   );
 }
-const VideosSummaryCard = () => {
+
+
+
+
+
+const MusicSummaryCard = (props: { changeTab: Function }) => {
+  const [areCourses, setAreCourses] = useState(false);
+
+  const setView = (view: boolean) => {
+    if (view) {
+      return (
+        <Text>LISTA AKTYWNYCH KURSÓW</Text>
+      );
+    } else {
+      return (
+        <View style={{ flex: 1, flexDirection: "row", marginTop: 8 }}>
+          <TouchableOpacity onPress={() => props.changeTab(2)}>
+            <View style={CustomElementStyles.mainButton}>
+              <Icon name="plus" size={31} color={Colors.tintColor} />
+            </View>
+          </TouchableOpacity>
+          <View style={{
+            marginLeft: 15, flex: 1, flexDirection: "column",
+            justifyContent: "center"
+          }}>
+            <Text numberOfLines={1}
+              style={CustomElementStyles.mainIndicator}
+            >
+              Trochę tutaj pusto...
+              </Text>
+            <TouchableOpacity onPress={() => props.changeTab(2)}>
+              <Text numberOfLines={1}
+                style={CustomElementStyles.mainCTA}
+              >
+                ruchanie
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      );
+    }
+  }
+
+
   return (
     <View style={CustomElementStyles.mainHeader}>
       <Text style={CustomElementStyles.mainHeaderText}>Twoja muzyka</Text>
+      {setView(areCourses)}
     </View>
   );
 }
+
+
 const StatsCard = () => {
   return (
     <View style={CustomElementStyles.mainHeader}>
@@ -127,3 +219,6 @@ const StatsCard = () => {
   );
 }
 
+function Icon(props: { name: React.ComponentProps<typeof Feather>['name']; color: string; size: number }) {
+  return <Feather style={{ marginTop: .5 }}{...props} />;
+}

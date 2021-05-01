@@ -207,6 +207,31 @@ const CustomElementStyles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         borderRadius: 20
+    },
+    mainButton: {
+        width: 49,
+        height: 49,
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        borderWidth: 2.7,
+        borderColor: Colors.tintColor,
+        borderRadius: 30,
+        marginLeft: 3,
+    },
+    mainIndicator: {
+        fontFamily: "Poppins_400Regular",
+        fontSize: 16,
+        color: Colors.text,
+        marginBottom: -5,
+        marginTop: 1,
+        letterSpacing: .2
+    },
+    mainCTA: {
+        fontFamily: "Poppins_400Regular",
+        fontSize: 16,
+        color: Colors.tintColor,
+        letterSpacing: .2
     }
 });
 
