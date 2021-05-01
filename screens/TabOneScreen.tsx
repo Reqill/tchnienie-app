@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState, useEffect, createRef } from 'react';
+import { useState, useEffect, createRef, useCallback } from 'react';
 import { Text, View, StyleSheet, Image, TouchableOpacity, ScrollView, LayoutAnimation, Platform, UIManager } from 'react-native';
 import BasicContainer from '../components/BasicContainer'
 import Colors from '../constants/Colors';
@@ -9,6 +9,8 @@ import EmotionName from '../constants/EmotionName';
 import EmotionIdx from "../constants/EmotionIdx"
 import { Feather } from '@expo/vector-icons';
 import { getCurrDate, saveCurrMood } from "../components/SaveMenage"
+import CourseList from "../constants/CourseList";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function TabOneScreen(props: { tabView: boolean; toggleNavBar: Function; changeTab: Function }) {
   const toggle = (e: string) => {
@@ -110,56 +112,129 @@ const MoodCart = (props: { tabView: boolean; toggleNavBar: Function }) => {
 
 
 const CourseSummaryCard = (props: { changeTab: Function }) => {
-  const [areCourses, setAreCourses] = useState(false);
+  const [visibleCourses, setVisibleCourses] = useState(0);
 
-  const setView = (view: boolean) => {
-    if (view) {
-      return (
-        <Text>LISTA AKTYWNYCH KURSÓW</Text>
-      );
-    } else {
-      return (
-        <View style={{ flex: 1, flexDirection: "row", marginTop: 8 }}>
-          <TouchableOpacity onPress={() => props.changeTab(1)}>
-            <View style={CustomElementStyles.mainButton}>
-              <Icon name="plus" size={31} color={Colors.tintColor} />
-            </View>
-          </TouchableOpacity>
-          <View style={{
-            marginLeft: 15, flex: 1, flexDirection: "column",
-            justifyContent: "center"
-          }}>
-            <Text numberOfLines={1}
-              style={CustomElementStyles.mainIndicator}
-            >
-              Trochę tutaj pusto...
-              </Text>
-            <TouchableOpacity onPress={() => props.changeTab(1)}>
-              <Text numberOfLines={1}
-                style={CustomElementStyles.mainCTA}
-              >
-                Rozpocznij nowy kurs!
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      );
-    }
+  const generateShortCourseList = () => {
+    return CourseList.map((el, i) => <CourseCard item={el} key={el.id} courseIdx={i} handleChange={props.changeTab} ruleTheWorld={handleRulingTheWorld} />)
   }
 
-  /*
-    ZW ide pić i do kibla
-  */
+  const handleRulingTheWorld = useCallback((e) => {
+    setVisibleCourses(visibleCourses + e)
+  }, []);
+
+  const returnButton = () => {
+    return (
+      <View style={{ flex: 1, flexDirection: "row", marginTop: 12 }}>
+        <TouchableOpacity onPress={() => props.changeTab(1)}>
+          <View style={CustomElementStyles.mainButton}>
+            <Icon name="plus" size={31} color={Colors.tintColor} />
+          </View>
+        </TouchableOpacity>
+        <View style={{
+          marginLeft: 15, flex: 1, flexDirection: "column",
+          justifyContent: "center"
+        }}>
+          <Text numberOfLines={1}
+            style={CustomElementStyles.mainIndicator}
+          >
+            {(visibleCourses > 0) ? "Chcesz wiedzieć więcej?" : "Trochę tutaj pusto..."}
+          </Text>
+          <TouchableOpacity onPress={() => props.changeTab(1)}>
+            <Text numberOfLines={1}
+              style={CustomElementStyles.mainCTA}
+            >
+              {(visibleCourses > 0) ? "Dodaj kolejny kurs!" : "Rozpocznij pierwszy kurs!"}
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
+  }
 
   return (
     <View style={CustomElementStyles.mainHeader}>
       <Text style={CustomElementStyles.mainHeaderText}>Twoje kursy</Text>
-      {setView(areCourses)}
+      {generateShortCourseList()}
+      {returnButton()}
     </View>
   );
 }
 
 
+/*
+  ZW ide pić i do kibla
+*/
+
+
+const getCourseInfo = async (storageKey: string) => {
+  try {
+    const jsonValue = await AsyncStorage.getItem(storageKey)
+    return jsonValue != null ? JSON.parse(jsonValue) : null;
+  } catch (e) {
+    console.log(`Course data read error: ${e}`)
+  }
+}
+
+const CourseCard = (props: { item: any, courseIdx: any, handleChange: Function, ruleTheWorld: Function }) => {
+  const [courseInfo, setCourseInfo] = useState(null);
+  const {
+    name,
+    type,
+    description,
+    imgPath,
+    episode,
+    id
+  } = props.item;
+  const key = `course-${name}-${id}`
+  const courseIdx = props.courseIdx;
+
+  if (courseInfo === null) {
+    getCourseInfo(key).then((res) => { setCourseInfo(res) })
+    return null;
+  } if (courseInfo.watchedEpisodes === 0 && courseInfo.isLiked === false) {
+    return null
+  } else {
+    props.ruleTheWorld(1);
+    return (
+      <TouchableOpacity activeOpacity={.55} onPress={() => props.handleChange(1)} style={{ marginTop: 7, marginBottom: 13 }}>
+        <View style={CustomElementStyles.courseContainer} activeOpacity={1} >
+          <View style={{ width: 62, height: 62, borderRadius: 10 }}>
+            <Image source={{ uri: imgPath }} style={{ width: 62, height: 62, borderRadius: 10 }} />
+            <View style={{ height: courseInfo.isLiked ? null : 0, overflow: 'hidden', flex: 1, flexDirection: "row", flexWrap: "wrap", zIndex: 99, position: "absolute", right: -7, bottom: -7, width: 28 }}>
+              <View style={[CustomElementStyles.infoIcon, { backgroundColor: Colors.pinkAccent }]}>
+                <Icon name="heart" size={18} color={Colors.whiteOff} />
+              </View>
+            </View>
+          </View>
+          <View style={{ width: "90%", paddingLeft: 13, flex: 1, justifyContent: "center", flexDirection: "column", height: "100%" }}>
+            <View style={{ marginBottom: -4 }}>
+              <Text numberOfLines={1} style={CustomElementStyles.courseHeader}>{name}</Text>
+            </View>
+            <View style={{ width: "100%" }}>
+              <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between" }}>
+                <View>
+                  <Text numberOfLines={1} style={CustomElementStyles.courseOther}>
+                    {type}
+                  </Text>
+                </View>
+                <View >
+                  <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between", marginRight: -10 }}>
+                    <Icon name="headphones" size={13} color={Colors.other} style={{ marginTop: 3 }} />
+                    <View>
+                      <Text numberOfLines={1} style={CustomElementStyles.courseOther}>
+                        {" "}{courseInfo.watchedEpisodes}/{episode.length}{" "}
+                      </Text>
+                    </View>
+                  </View>
+                </View>
+              </View>
+            </View>
+          </View>
+        </View >
+      </TouchableOpacity>
+    );
+  }
+}
 
 
 
