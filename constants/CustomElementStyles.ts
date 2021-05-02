@@ -217,14 +217,14 @@ const CustomElementStyles = StyleSheet.create({
         borderWidth: 2.7,
         borderColor: Colors.tintColor,
         borderRadius: 30,
-        marginLeft: 3,
+        marginLeft: 4,
     },
     mainIndicator: {
         fontFamily: "Poppins_400Regular",
         fontSize: 16,
         color: Colors.text,
         marginBottom: -5,
-        marginTop: 1,
+        marginTop: 2,
         letterSpacing: .2
     },
     mainCTA: {

@@ -33,7 +33,7 @@ interface IProps {
 interface IState {
     activeTabIdx: Number;
     activityDaysInRow: Number;
-    currentScreen: JSX.Element;
+    currentScreen: JSX.Element | null;
     backBtn: JSX.Element;
     tabHistory: any;
     navBarVisible: boolean;
@@ -56,7 +56,7 @@ export default class NavigationHandler extends React.Component<IProps, IState> {
         this.state = {
             activeTabIdx: 0,
             activityDaysInRow: 69, //TODO: check from app memory/load, and increment idx on audio play on each day 
-            currentScreen: <TabOneScreen />,
+            currentScreen: null,
             moodLog: <View />,
             backBtn: <View />,
             tabHistory: [0],
@@ -206,6 +206,17 @@ export default class NavigationHandler extends React.Component<IProps, IState> {
         BackHandler.removeEventListener("hardwareBackPress", this.backAction);
     }
 
+    returnScreen(e) {
+        if (e === null) {
+            return (<TabOneScreen
+                tabView={this.state.navBarVisible} toggleNavBar={this.toggleNavBar}
+                changeTab={this.changeTabIdx}
+            />);
+        } else {
+            return e;
+        }
+    }
+
     render() {
         return (
             <View>
@@ -242,7 +253,7 @@ export default class NavigationHandler extends React.Component<IProps, IState> {
                             style={{ zIndex: 998, position: "absolute", top: 0, width: "100%", height: 10 }}
                         />
                         <ScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
-                            {this.state.currentScreen}
+                            {this.returnScreen(this.state.currentScreen)}
                         </ScrollView>
 
                         <View style={[styles.hiddenScreen, { height: this.state.activeMoodLog ? "100%" : "0%", }]}>

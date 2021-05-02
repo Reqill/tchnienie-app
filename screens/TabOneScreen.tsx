@@ -14,13 +14,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import MusicList from "../constants/MusicList";
 
 export default function TabOneScreen(props: { tabView: boolean; toggleNavBar: Function; changeTab: Function }) {
-  const toggle = useCallback((e: string) => {
-    props.toggleNavBar(e);
-  }, [])
-
   return (
     <View>
-      <BasicContainer content={<MoodCart tabView={props.tabView} toggleNavBar={toggle} />} />
+      <BasicContainer content={<MoodCart tabView={props.tabView} toggleNavBar={props.toggleNavBar} />} />
       <BasicContainer content={<CourseSummaryCard changeTab={props.changeTab} />} />
       <BasicContainer content={<MusicSummaryCard changeTab={props.changeTab} navBarAction={props.toggleNavBar} />} />
       <BasicContainer content={<StatsCard />} />
@@ -134,7 +130,7 @@ const CourseSummaryCard = (props: { changeTab: Function }) => {
           </View>
         </TouchableOpacity>
         <View style={{
-          marginLeft: 15, flex: 1, flexDirection: "column",
+          marginLeft: 19, flex: 1, flexDirection: "column",
           justifyContent: "center"
         }}>
           <Text numberOfLines={1}
@@ -292,7 +288,10 @@ const MusicSummaryCard = (props: { changeTab: Function, navBarAction: Function }
   const [visibleCourses, setVisibleCourses] = useState(0);
 
   const generateShortCourseList = () => {
-    return MusicList.map((el, i) => <MusicCard item={el} key={el.id} musicIdx={i} handleChange={props.navBarAction} ruleTheWorld={handleRulingTheWorld} targetPage={2} />)
+    return MusicList.map((el, i) =>
+      <MusicCard item={el} key={el.id} musicIdx={i} handleChange={props.navBarAction}
+        ruleTheWorld={handleRulingTheWorld} targetPage={2}
+      />)
   }
 
   const handleRulingTheWorld = useCallback((e) => {
@@ -310,7 +309,7 @@ const MusicSummaryCard = (props: { changeTab: Function, navBarAction: Function }
           </View>
         </TouchableOpacity>
         <View style={{
-          marginLeft: 15, flex: 1, flexDirection: "column",
+          marginLeft: 19, flex: 1, flexDirection: "column",
           justifyContent: "center"
         }}>
           <Text numberOfLines={1}
@@ -343,3 +342,4 @@ const StatsCard = () => {
 function Icon(props: { name: React.ComponentProps<typeof Feather>['name']; color: string; size: number }) {
   return <Feather style={{ marginTop: .5 }}{...props} />;
 }
+
