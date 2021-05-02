@@ -119,6 +119,10 @@ const CourseSummaryCard = (props: { changeTab: Function }) => {
     setVisibleCourses(visibleCourses + e)
   }, []);
 
+  //
+  //TODO: Add and custom text when you have weatched everuthing
+  //
+
   return (
     <View style={CustomElementStyles.mainHeader}>
       <Text style={CustomElementStyles.mainHeaderText}>Twoje kursy</Text>
@@ -177,7 +181,7 @@ const CourseCard = (props: { item: any, courseIdx: any, handleChange: Function, 
   if (courseInfo === null) {
     getCourseInfo(key).then((res) => { setCourseInfo(res) })
     return null;
-  } if (courseInfo.watchedEpisodes === 0 && courseInfo.isLiked === false) {
+  } if (courseInfo.watchedEpisodes === 0) {
     return null
   } else {
     props.ruleTheWorld(1);

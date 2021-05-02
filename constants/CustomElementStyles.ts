@@ -232,6 +232,15 @@ const CustomElementStyles = StyleSheet.create({
         fontSize: 16,
         color: Colors.tintColor,
         letterSpacing: .2
+    },
+    settingsIndicator: {
+        color: Colors.text,
+        fontSize: 14,
+        marginTop: 3.5,
+        fontFamily: "Poppins_400Regular",
+        opacity: .8,
+        paddingBottom: 3,
+        letterSpacing: .2,
     }
 });
 

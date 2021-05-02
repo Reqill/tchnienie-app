@@ -262,7 +262,7 @@ export default class NavigationHandler extends React.Component<IProps, IState> {
                         <View style={[styles.hiddenScreen, { height: this.state.activeSettings ? "100%" : "0%", }]}>
                             <Settings />
                         </View>
-                        <View style={[styles.hiddenScreen, { height: this.state.activeCourse ? "100%" : "0%", }]}>
+                        <View style={{ height: this.state.activeCourse ? "100%" : "0%", backgroundColor: Colors.backgroundColor, width: "100%", zIndex: 101, position: "absolute", bottom: 0, maxHeight: "100%", maxWidth: "100%" }}>
                             <AudioPlayer activeAudio={this.state.activeAudio} />
                         </View>
                     </View>
