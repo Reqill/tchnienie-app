@@ -1,13 +1,14 @@
 import * as React from 'react'
 import { useState, useEffect, useCallback } from 'react'
 import CustomElementStyles from '../constants/CustomElementStyles';
-import { Text, View, Image, TouchableOpacity, Alert, Button, Touchable } from 'react-native'
+import { Text, View, Image, TouchableOpacity, Alert, Button, Touchable, } from 'react-native'
 import Colors from "../constants/Colors"
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CourseList from '../constants/CourseList'
 import MusicList from '../constants/MusicList'
 import { Feather } from '@expo/vector-icons';
 import { ScrollView } from 'react-native-gesture-handler';
+import { Restart } from 'fiction-expo-restart';
 
 
 const moodDataBlank = null;
@@ -70,6 +71,10 @@ export default function Settings() {
                     storeJSON(`dailyStreakSeries`, streakDataBlank);
                     wipeMusicData();
                     wipeCourseData();
+                    AsyncStorage.removeItem('LastDayOpen');
+                    AsyncStorage.removeItem('alreadyLaunchedd28').then(() => {
+                        Restart();
+                    })
                 }
             }
         ]);
