@@ -241,6 +241,33 @@ const CustomElementStyles = StyleSheet.create({
         opacity: .8,
         paddingBottom: 3,
         letterSpacing: .2,
+    },
+    appHeaderText: {
+        fontFamily: "Pacifico_400Regular",
+        fontSize: 32,
+        color: Colors.white,
+        letterSpacing: 2,
+    },
+    introductionHeader: {
+        width: "100%",
+        textAlign: "center",
+        fontFamily: "Poppins_600SemiBold",
+        color: Colors.white,
+        fontSize: 28
+    },
+    introductionText: {
+        width: "90%",
+        textAlign: "center",
+        fontFamily: "Poppins_400Regular",
+        color: Colors.text,
+        opacity: .8,
+        fontSize: 14
+    },
+    dotInactive: {
+        height: 10,
+        width: 10,
+        borderRadius: 10,
+        opacity: .8
     }
 });
 
