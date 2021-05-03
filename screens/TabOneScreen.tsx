@@ -29,7 +29,8 @@ const MoodCart = (props: { tabView: boolean; toggleNavBar: Function }) => {
   const [expanded, setExpanded] = useState(false);
   const [showWholeLog, setShowWholeLog] = useState(false);
   const [currEmotion, setCurrEmotion] = useState(0);
-  const [emotionList, setEmotionList] = useState([])
+  const [emotionList, setEmotionList] = useState([]);
+  const [used, setUsed] = useState(false);
   if (Platform.OS === 'android') {
     UIManager.setLayoutAnimationEnabledExperimental(true);
   }
@@ -43,6 +44,18 @@ const MoodCart = (props: { tabView: boolean; toggleNavBar: Function }) => {
     setExpanded(false);
     props.toggleNavBar("TOGGLE_MOOD_LOG");
   }
+
+  if (!used) {
+    getCourseInfo(`moodWholeData`).then((res) => {
+      if (typeof res[0][0] === undefined) {
+        props.toggleNavBar("TOGGLE_DAILY_MOOD")
+      } else if (res[0][0] !== currEmotion) {
+        setCurrEmotion(res[0][0])
+        setUsed(true)
+      }
+    })
+  }
+
 
   useEffect(() => {
     let tmp = [];

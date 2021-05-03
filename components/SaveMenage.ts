@@ -31,6 +31,7 @@ export const getCurrDate = (moodIdx?: number) => {
     }
     return output;
 }
+
 export const saveCurrMood = (moodIdx: number) => {
     const now = getCurrDate();
     const todayMoodInfo = {

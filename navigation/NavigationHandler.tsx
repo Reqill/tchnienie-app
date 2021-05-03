@@ -1,23 +1,19 @@
 import TabOneScreen from '../screens/TabOneScreen';
 import TabTwoScreen from '../screens/TabTwoScreen';
 import TabThreeScreen from '../screens/TabThreeScreen';
-import TabFourScreen from '../screens/TabFourScreen';
 import NavBar from './NavBar'
-import React, { useState, useEffect, createRef } from 'react';
-import { View, Text, Button, TouchableOpacity, Image, StyleSheet, ScrollView, BackHandler, Alert, FlatList, LayoutAnimation, Platform, UIManager } from 'react-native'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { Fontisto } from '@expo/vector-icons';
+import React from 'react';
+import { View, Text, Button, TouchableOpacity, StyleSheet, ScrollView, BackHandler, Alert, FlatList, LayoutAnimation, Platform, UIManager } from 'react-native'
 import Colors from '../constants/Colors';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Feather } from '@expo/vector-icons';
-import BasicContainer from '../components/BasicContainer'
 import { throwIfAudioIsDisabled } from 'expo-av/build/Audio/AudioAvailability';
-// import MoodLog from '../components/MoodLog'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import MoodLog from '../screens/MoodLog';
 import Settings from '../screens/Settings'
 import AudioPlayer from "../screens/AudioPlayer"
-
+import CustomElementStyles from '../constants/CustomElementStyles';
+import DailyMood from '../screens/DailyMood'
 
 const getJSONData = async (storageKey: string) => {
     try {
@@ -41,7 +37,8 @@ interface IState {
     moodLog: JSX.Element;
     activeSettings: boolean;
     activeCourse: boolean;
-    activeAudio: Array<any>
+    activeAudio: Array<any>;
+    activeDailyMood: boolean;
 }
 
 function Icon(props: { name: React.ComponentProps<typeof Feather>['name']; color: string }) {
@@ -64,14 +61,33 @@ export default class NavigationHandler extends React.Component<IProps, IState> {
             activeMoodLog: false,
             activeSettings: false,
             activeCourse: false,
+            activeDailyMood: false,
             activeAudio: [],
         };
         this.changeTabIdx = this.changeTabIdx.bind(this)
         this.toggleNavBar = this.toggleNavBar.bind(this)
+
         if (Platform.OS === 'android') {
             UIManager.setLayoutAnimationEnabledExperimental(true);
         }
     }
+
+    checkDay = () => {
+        const date = new Date();
+        const start = new Date(date.getFullYear(), 0, 0);
+        const diff = date - start;
+        const oneDay = 1000 * 60 * 60 * 24;
+        const dayOfYear = Math.floor(diff / oneDay);
+        let lastDay;
+        AsyncStorage.getItem("LastDayOpen").then((res) => {
+            lastDay = Number(res);
+            if (lastDay !== dayOfYear) {
+                this.toggleNavBar("TOGGLE_DAILY_MOOD")
+            }
+        })
+    }
+
+
 
     toggleNavBar = (e?: any, audioPath?: Array<any>) => {
         if (e === "TOGGLE_MOOD_LOG") {
@@ -98,7 +114,9 @@ export default class NavigationHandler extends React.Component<IProps, IState> {
             this.setState({ activeCourse: true })
             this.setState({ activeAudio: audioPath })
         }
-
+        if (e === "TOGGLE_DAILY_MOOD") {
+            this.setState({ activeDailyMood: true })
+        }
         if (e !== "TOGGLE_SETTINGS") {
             this.setState({ navBarVisible: !this.state.navBarVisible }, () => {
                 if (!this.state.navBarVisible) {
@@ -112,6 +130,7 @@ export default class NavigationHandler extends React.Component<IProps, IState> {
                     this.setState({ activeMoodLog: false })
                     this.setState({ activeSettings: false })
                     this.setState({ activeCourse: false })
+                    this.setState({ activeDailyMood: false })
                     this.setState({ backBtn: <View /> })
                 }
             })
@@ -127,10 +146,12 @@ export default class NavigationHandler extends React.Component<IProps, IState> {
                 this.setState({ activeSettings: true })
                 this.setState({ navBarVisible: false })
                 this.setState({ activeCourse: false })
+                this.setState({ activeDailyMood: false })
             } else {
                 this.setState({ activeSettings: false })
                 this.setState({ activeMoodLog: false })
                 this.setState({ navBarVisible: true })
+                this.setState({ activeDailyMood: false })
                 this.setState({ activeCourse: false })
                 this.setState({ backBtn: <View /> })
             }
@@ -200,6 +221,7 @@ export default class NavigationHandler extends React.Component<IProps, IState> {
 
     componentDidMount() {
         BackHandler.addEventListener("hardwareBackPress", this.backAction);
+        this.checkDay();
     }
 
     componentWillUnmount() {
@@ -227,7 +249,7 @@ export default class NavigationHandler extends React.Component<IProps, IState> {
                             <View style={styles.flexTopBar}>
                                 <View style={{ flex: 1, flexDirection: "row" }}>
                                     {this.state.backBtn}
-                                    <Text style={styles.appHeaderText}>tchnienie</Text>
+                                    <Text style={CustomElementStyles.appHeaderText}>tchnienie</Text>
                                 </View>
                                 <View>
                                     <View style={{ flex: 1, flexDirection: "row", alignItems: "center", marginTop: 2 }}>
@@ -240,11 +262,8 @@ export default class NavigationHandler extends React.Component<IProps, IState> {
                                         </TouchableOpacity>
                                     </View>
                                 </View>
-
                             </View>
                         </View>
-
-
                     </View>
 
                     <View style={styles.screenContainer}>
@@ -261,6 +280,13 @@ export default class NavigationHandler extends React.Component<IProps, IState> {
                         </View>
                         <View style={[styles.hiddenScreen, { height: this.state.activeSettings ? "100%" : "0%", }]}>
                             <Settings />
+                        </View>
+                        <View style={[styles.hiddenScreen, {
+                            height: this.state.activeDailyMood ? "100%" : "0%",
+                            zIndex: this.state.activeDailyMood ? 997 : -999,
+                            opacity: this.state.activeDailyMood ? 1 : 0
+                        }]}>
+                            <DailyMood toggleNavBar={this.toggleNavBar} />
                         </View>
                         <View style={{ height: this.state.activeCourse ? "100%" : "0%", backgroundColor: Colors.backgroundColor, width: "100%", zIndex: 101, position: "absolute", bottom: 0, maxHeight: "100%", maxWidth: "100%" }}>
                             <AudioPlayer activeAudio={this.state.activeAudio} />
