@@ -4,8 +4,6 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { View } from 'react-native';
 
 import useCachedResources from './hooks/useCachedResources';
-import useColorScheme from './hooks/useColorScheme';
-import Navigation from './navigation';
 import NavigationHandler from './navigation/NavigationHandler'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import FirstLaunch from './screens/FirstLaunch';
@@ -83,10 +81,10 @@ class StartingComponent extends React.Component {
     } else if (this.state.firstLaunch == true) {
       return (
         <SafeAreaProvider>
-          <StatusBar />
           <View style={{ backgroundColor: Colors.backgroundColor, width: "100%", height: "100%" }}>
             <FirstLaunch />
           </View>
+          <StatusBar />
         </SafeAreaProvider>);
     } else {
       return (
