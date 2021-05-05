@@ -69,6 +69,14 @@ const EpisodeElement = (props: { elementData, info, idx, storeKey, courseIdx: nu
                 watchedEpisode(idx)
             }
             props.toggleNavBar("TOGGLE_COURSE", ["COURSE", props.courseIdx, idx])
+
+            const date = new Date();
+            const start = new Date(date.getFullYear(), 0, 0);
+            const diff = date - start;
+            const oneDay = 1000 * 60 * 60 * 24;
+            const dayOfYear = Math.floor(diff / oneDay);
+            AsyncStorage.setItem('LastDayOnline', String(dayOfYear))
+
         } else {
             // console.log("MUSISZ OBEJRZEĆ POPRZEDNIE ABY ROZPOCZĄĆ KOLEJNY")
         }
