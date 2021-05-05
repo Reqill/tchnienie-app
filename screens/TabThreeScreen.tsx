@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState, useEffect, createRef, useCallback } from 'react';
-import { Text, View, StyleSheet, Image, TouchableOpacity, LayoutAnimation, FlatList, Platform, UIManager, Touchable } from 'react-native';
+import { Text, View, StyleSheet, Image, TouchableOpacity, LayoutAnimation, Alert, FlatList, Platform, UIManager, Touchable } from 'react-native';
 import BasicContainer from '../components/BasicContainer';
 import Colors from '../constants/Colors';
 import CustomElementStyles from '../constants/CustomElementStyles';
@@ -49,6 +49,17 @@ const storeCourseInfo = async (storageKey: string, value: JSON | Array<any>) => 
     }
 }
 
+const alertcik = () => {
+    Alert.alert("Informacja", "Możliwość kolejkowania utworów będzie dostępna w krótce.", [
+        {
+            text: "Ok",
+            onPress: () => null,
+            style: "cancel"
+        },
+    ]);
+
+}
+
 const MusicCard = (props: { item: any; musicIdx: any; toggleNavBar: Function }) => {
     const [expanded, setExpanded] = useState(false)
     const [musicInfo, setMusicInfo] = useState(null);
@@ -66,6 +77,13 @@ const MusicCard = (props: { item: any; musicIdx: any; toggleNavBar: Function }) 
         LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
         setExpanded(false);
         props.toggleNavBar(e, path)
+
+        const date = new Date();
+        const start = new Date(date.getFullYear(), 0, 0);
+        const diff = date - start;
+        const oneDay = 1000 * 60 * 60 * 24;
+        const dayOfYear = Math.floor(diff / oneDay);
+        AsyncStorage.setItem('LastDayOnline', String(dayOfYear))
     }
     // console.log(isLiked)
 
@@ -132,7 +150,7 @@ const MusicCard = (props: { item: any; musicIdx: any; toggleNavBar: Function }) 
                                             <TouchableOpacity style={{ marginRight: -7 }} onPress={() => handleChange("TOGGLE_COURSE", ["MUSIC", musicIdx])}>
                                                 <Icon name="play" color={Colors.whiteOff} size={28} />
                                             </TouchableOpacity>
-                                            <TouchableOpacity>
+                                            <TouchableOpacity onPress={() => alertcik()} activeOpacity={1} style={{ opacity: .4 }}>
                                                 <Icon name="plus" color={Colors.whiteOff} size={29} />
                                             </TouchableOpacity>
                                         </View>
