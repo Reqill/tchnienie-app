@@ -5,7 +5,8 @@ import CourseList from '../constants/CourseList'
 import MusicList from '../constants/MusicList'
 import Colors from '../constants/Colors';
 import CustomElementStyles from '../constants/CustomElementStyles';
-import NavigationHandler from '../navigation/NavigationHandler'
+import NavigationHandler from '../navigation/NavigationHandler';
+import { Restart } from 'fiction-expo-restart';
 
 
 export default function FirstLaunch() {
@@ -81,8 +82,9 @@ export default function FirstLaunch() {
     }
 
     if (currentScreen === 3) {
+        Restart();
         return (
-            <NavigationHandler />
+            null
         );
     } else {
         return (
