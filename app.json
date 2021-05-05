@@ -2,7 +2,7 @@
   "expo": {
     "name": "tchnienie",
     "slug": "tchnienie",
-    "version": "0.9.3",
+    "version": "0.9.4a",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
