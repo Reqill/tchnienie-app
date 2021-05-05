@@ -7,6 +7,17 @@ import CustomElementStyles from '../constants/CustomElementStyles';
 import CourseList from "../constants/CourseList";
 import { Feather } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Cover1 from "../assets/images/course1cover.jpg";
+import Cover2 from "../assets/images/course2cover.jpg";
+import Cover3 from "../assets/images/course3cover.jpg";
+import Cover4 from "../assets/images/course4cover.jpg";
+
+const covers = [
+    Cover1,
+    Cover2,
+    Cover3,
+    Cover4,
+]
 
 
 export default function TabTwoScreen(props: { toggleNavBar: Function }) {
@@ -175,7 +186,7 @@ const CourseCard = (props: { item: any, courseIdx: any, toggleNavBar: Function }
                         LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut); setExpanded(!expanded)
                     }}>
                         <View style={{ width: 62, height: 62, borderRadius: 10 }}>
-                            <Image source={{ uri: imgPath }} style={{ width: 62, height: 62, borderRadius: 10 }} />
+                            <Image source={covers[courseIdx]} style={{ width: 62, height: 62, borderRadius: 10 }} />
                             <View style={{ height: courseInfo.isLiked ? null : 0, overflow: 'hidden', flex: 1, flexDirection: "row", flexWrap: "wrap", zIndex: 99, position: "absolute", right: -7, bottom: -7, width: 28 }}>
                                 <View style={[CustomElementStyles.infoIcon, { backgroundColor: Colors.pinkAccent }]}>
                                     <Icon name="heart" size={18} color={Colors.whiteOff} />

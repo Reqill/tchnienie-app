@@ -8,6 +8,7 @@ import MusicList from "../constants/MusicList";
 import { Feather } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { LinearGradient } from 'expo-linear-gradient';
+import MusicCover from '../assets/images/music1cover.jpg'
 
 export default function TabTwoScreen(props: { toggleNavBar: Function }) {
 
@@ -103,7 +104,7 @@ const MusicCard = (props: { item: any; musicIdx: any; toggleNavBar: Function }) 
                                                 </View>
 
 
-                                                <Image source={{ uri: imgPath }} style={{ width: "100%", height: "100%", borderRadius: 10 }} />
+                                                <Image source={MusicCover} style={{ width: "100%", height: "100%", borderRadius: 10 }} />
                                             </View>
                                         </View>
 

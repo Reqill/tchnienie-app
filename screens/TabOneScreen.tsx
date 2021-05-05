@@ -12,6 +12,19 @@ import { getCurrDate, saveCurrMood } from "../components/SaveMenage"
 import CourseList from "../constants/CourseList";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import MusicList from "../constants/MusicList";
+import Cover1 from "../assets/images/course1cover.jpg";
+import Cover2 from "../assets/images/course2cover.jpg";
+import Cover3 from "../assets/images/course3cover.jpg";
+import Cover4 from "../assets/images/course4cover.jpg";
+import MusicCover from '../assets/images/music1cover.jpg'
+import AddBtn from '../assets/images/add-btn.png'
+
+const covers = [
+  Cover1,
+  Cover2,
+  Cover3,
+  Cover4,
+]
 
 export default function TabOneScreen(props: { tabView: boolean; toggleNavBar: Function; changeTab: Function }) {
   return (
@@ -65,6 +78,9 @@ const MoodCart = (props: { tabView: boolean; toggleNavBar: Function }) => {
       }
     }
     setEmotionList(tmp);
+    return () => {
+      setEmotionList([]); // This worked for me
+    };
   }, [currEmotion, props.tabView])
 
 
@@ -142,9 +158,10 @@ const CourseSummaryCard = (props: { changeTab: Function }) => {
       {generateShortCourseList()}
       <View style={{ flex: 1, flexDirection: "row", marginTop: 12 }}>
         <TouchableOpacity onPress={() => props.changeTab(1)}>
-          <View style={CustomElementStyles.mainButton}>
+          <Image source={AddBtn} style={{ resizeMode: "contain", width: 49, height: 49, marginLeft: 4 }} />
+          {/* <View style={CustomElementStyles.mainButton}>
             <Icon name="plus" size={31} color={Colors.tintColor} />
-          </View>
+          </View> */}
         </TouchableOpacity>
         <View style={{
           marginLeft: 19, flex: 1, flexDirection: "column",
@@ -202,7 +219,7 @@ const CourseCard = (props: { item: any, courseIdx: any, handleChange: Function, 
       <TouchableOpacity activeOpacity={.55} onPress={() => props.handleChange(props.targetPage)} style={{ marginTop: 7, marginBottom: 13 }}>
         <View style={CustomElementStyles.courseContainer} activeOpacity={1} >
           <View style={{ width: 62, height: 62, borderRadius: 10 }}>
-            <Image source={{ uri: imgPath }} style={{ width: 62, height: 62, borderRadius: 10 }} />
+            <Image source={covers[courseIdx]} style={{ width: 62, height: 62, borderRadius: 10 }} />
             <View style={{ height: courseInfo.isLiked ? null : 0, overflow: 'hidden', flex: 1, flexDirection: "row", flexWrap: "wrap", zIndex: 99, position: "absolute", right: -7, bottom: -7, width: 28 }}>
               <View style={[CustomElementStyles.infoIcon, { backgroundColor: Colors.pinkAccent }]}>
                 <Icon name="heart" size={18} color={Colors.whiteOff} />
@@ -262,11 +279,12 @@ const MusicCard = (props: { item: any, musicIdx: any, handleChange: Function, ru
       <TouchableOpacity activeOpacity={.55} onPress={() => props.handleChange("TOGGLE_COURSE", ["MUSIC", musicIdx])} style={{ marginTop: 7, marginBottom: 13 }}>
         <View style={CustomElementStyles.courseContainer} activeOpacity={1} >
           <View style={{ width: 62, height: 62, borderRadius: 10 }}>
-            <Image source={{ uri: imgPath }} style={{ width: 62, height: 62, borderRadius: 10 }} />
+            <Image source={MusicCover} style={{ width: 62, height: 62, borderRadius: 10 }} />
             <View style={{ height: courseInfo.isLiked ? null : 0, overflow: 'hidden', flex: 1, flexDirection: "row", flexWrap: "wrap", zIndex: 99, position: "absolute", right: -7, bottom: -7, width: 28 }}>
-              <View style={[CustomElementStyles.infoIcon, { backgroundColor: Colors.pinkAccent }]}>
+              <Image source={AddBtn} style={{ resizeMode: "contain", width: 49, height: 49, marginLeft: 4 }} />
+              {/* <View style={[CustomElementStyles.infoIcon, { backgroundColor: Colors.pinkAccent }]}>
                 <Icon name="heart" size={18} color={Colors.whiteOff} />
-              </View>
+              </View> */}
             </View>
           </View>
           <View style={{ width: "90%", paddingLeft: 13, flex: 1, justifyContent: "center", flexDirection: "column", height: "100%" }}>
@@ -321,7 +339,7 @@ const MusicSummaryCard = (props: { changeTab: Function, navBarAction: Function }
       {generateShortCourseList()}
       <View style={{ flex: 1, flexDirection: "row", marginTop: 12 }}>
         <TouchableOpacity onPress={() => props.changeTab(2)}>
-          <View style={CustomElementStyles.mainButton}>
+          <View style={[CustomElementStyles.mainButton]}>
             <Icon name="plus" size={31} color={Colors.tintColor} />
           </View>
         </TouchableOpacity>
