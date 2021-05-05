@@ -52,7 +52,7 @@ export default class NavigationHandler extends React.Component<IProps, IState> {
         super(props);
         this.state = {
             activeTabIdx: 0,
-            activityDaysInRow: 69, //TODO: check from app memory/load, and increment idx on audio play on each day 
+            activityDaysInRow: 0,
             currentScreen: null,
             moodLog: <View />,
             backBtn: <View />,
@@ -77,12 +77,44 @@ export default class NavigationHandler extends React.Component<IProps, IState> {
         const start = new Date(date.getFullYear(), 0, 0);
         const diff = date - start;
         const oneDay = 1000 * 60 * 60 * 24;
-        const dayOfYear = Math.floor(diff / oneDay);
+        let dayOfYear = Math.floor(diff / oneDay); ////// const
         let lastDay;
         AsyncStorage.getItem("LastDayOpen").then((res) => {
             lastDay = Number(res);
             if (lastDay !== dayOfYear) {
                 this.toggleNavBar("TOGGLE_DAILY_MOOD")
+            }
+        })
+        AsyncStorage.getItem('LastDayOnline').then((res) => {
+            if (res !== null) {
+                const lastActive = Number(res)
+                if (lastActive === (365 || 366) && dayOfYear === 0) {
+                    AsyncStorage.setItem('streakInfo', String(Number(this.state.activityDaysInRow) + 1)).then(() => {
+                        AsyncStorage.getItem('streakInfo').then((res) => {
+                            if (res !== null) {
+                                this.setState({ activityDaysInRow: Number(res) })
+                            }
+                        })
+                    });
+                    this.setState({ activityDaysInRow: (Number(this.state.activityDaysInRow) + 1) });
+                } else if (lastActive === (dayOfYear - 1)) {
+                    AsyncStorage.setItem('streakInfo', String(Number(this.state.activityDaysInRow) + 1)).then(() => {
+                        AsyncStorage.getItem('streakInfo').then((res) => {
+                            if (res !== null) {
+                                this.setState({ activityDaysInRow: Number(res) })
+                            }
+                        })
+                    });
+                    this.setState({ activityDaysInRow: (Number(this.state.activityDaysInRow) + 1) });
+                } else if (lastActive !== dayOfYear) {
+                    AsyncStorage.setItem('streakInfo', String(0)).then(() => {
+                        AsyncStorage.getItem('streakInfo').then((res) => {
+                            if (res !== null) {
+                                this.setState({ activityDaysInRow: Number(res) })
+                            }
+                        })
+                    });
+                }
             }
         })
     }
@@ -253,10 +285,11 @@ export default class NavigationHandler extends React.Component<IProps, IState> {
                                 </View>
                                 <View>
                                     <View style={{ flex: 1, flexDirection: "row", alignItems: "center", marginTop: 2 }}>
-                                        <Text
-                                            style={{ marginTop: 12, marginRight: 14, fontSize: 15, color: Colors.white, fontFamily: "Poppins_500Medium" }}>
-                                            🔥 {this.state.activityDaysInRow} dni
-                                    </Text>
+                                        <TouchableOpacity onPress={(e) => this.checkDay()} activeOpacity={.9}>
+                                            <Text style={{ marginTop: 12, marginRight: 14, fontSize: 15, color: Colors.white, fontFamily: "Poppins_500Medium" }}>
+                                                🔥 {this.state.activityDaysInRow} dni
+                                        </Text>
+                                        </TouchableOpacity>
                                         <TouchableOpacity onPress={() => this.toggleNavBar("TOGGLE_SETTINGS")}>
                                             <Icon name="settings" color={Colors.whiteOff} />
                                         </TouchableOpacity>
