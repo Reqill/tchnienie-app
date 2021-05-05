@@ -218,6 +218,7 @@ const CustomElementStyles = StyleSheet.create({
         borderColor: Colors.tintColor,
         borderRadius: 30,
         marginLeft: 4,
+        opacity: 1,
     },
     mainIndicator: {
         fontFamily: "Poppins_400Regular",
