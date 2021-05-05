@@ -4,7 +4,7 @@ export default [
         name: "Początki medytacji",
         type: "kurs wstępny",
         description: "Lorem Ipsum Dolor i jedą kurczaki z Olą",
-        imgPath: "https://i.imgur.com/g4ZL7GT.png",
+        imgPath: "../assets/images/course1cover.jpg",
         episode: [
             {
                 id: "0",
@@ -61,7 +61,7 @@ export default [
         name: "Kursik 2",
         type: "kurs podstawowy",
         description: "Lorem Ipsum Dolor i jedą kurczaki z Olą",
-        imgPath: "https://i.imgur.com/ilqnDRF.jpeg",
+        imgPath: "../assets/images/course2cover.jpg",
         episode: [
             {
                 id: "0",
@@ -118,7 +118,7 @@ export default [
         name: "Elo kurs 4",
         type: "kurs podstawowy",
         description: "Lorem Ipsum Dolor i jedą kurczaki z Olą",
-        imgPath: "https://i.imgur.com/NFvJxvl.png",
+        imgPath: "../assets/images/course3cover.jpg",
         episode: [
             {
                 id: "0",
@@ -175,7 +175,7 @@ export default [
         name: "Oddychanie",
         type: "kurs specjalny",
         description: "Lorem Ipsum Dolor i jedą kurczaki z Olą",
-        imgPath: "https://i.imgur.com/nJMDRMQ.png",
+        imgPath: "../assets/images/course4cover.jpg",
         episode: [
             {
                 id: "0",
