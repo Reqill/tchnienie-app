@@ -17,7 +17,8 @@ import Cover2 from "../assets/images/course2cover.jpg";
 import Cover3 from "../assets/images/course3cover.jpg";
 import Cover4 from "../assets/images/course4cover.jpg";
 import MusicCover from '../assets/images/music1cover.jpg'
-import AddBtn from '../assets/images/add-btn.png'
+import AddBtn from '../assets/images/add-btn.png';
+import AddButton from '../assets/images/AddButton'
 
 const covers = [
   Cover1,
@@ -157,11 +158,8 @@ const CourseSummaryCard = (props: { changeTab: Function }) => {
       <Text style={CustomElementStyles.mainHeaderText}>Twoje kursy</Text>
       {generateShortCourseList()}
       <View style={{ flex: 1, flexDirection: "row", marginTop: 12 }}>
-        <TouchableOpacity onPress={() => props.changeTab(1)}>
-          <Image source={AddBtn} style={{ resizeMode: "contain", width: 49, height: 49, marginLeft: 4 }} />
-          {/* <View style={CustomElementStyles.mainButton}>
-            <Icon name="plus" size={31} color={Colors.tintColor} />
-          </View> */}
+        <TouchableOpacity onPress={() => props.changeTab(1)} style={{ paddingLeft: 1.5 }}>
+          <AddButton />
         </TouchableOpacity>
         <View style={{
           marginLeft: 19, flex: 1, flexDirection: "column",
@@ -281,10 +279,9 @@ const MusicCard = (props: { item: any, musicIdx: any, handleChange: Function, ru
           <View style={{ width: 62, height: 62, borderRadius: 10 }}>
             <Image source={MusicCover} style={{ width: 62, height: 62, borderRadius: 10 }} />
             <View style={{ height: courseInfo.isLiked ? null : 0, overflow: 'hidden', flex: 1, flexDirection: "row", flexWrap: "wrap", zIndex: 99, position: "absolute", right: -7, bottom: -7, width: 28 }}>
-              <Image source={AddBtn} style={{ resizeMode: "contain", width: 49, height: 49, marginLeft: 4 }} />
-              {/* <View style={[CustomElementStyles.infoIcon, { backgroundColor: Colors.pinkAccent }]}>
+              <View style={[CustomElementStyles.infoIcon, { backgroundColor: Colors.pinkAccent }]}>
                 <Icon name="heart" size={18} color={Colors.whiteOff} />
-              </View> */}
+              </View>
             </View>
           </View>
           <View style={{ width: "90%", paddingLeft: 13, flex: 1, justifyContent: "center", flexDirection: "column", height: "100%" }}>
@@ -338,10 +335,8 @@ const MusicSummaryCard = (props: { changeTab: Function, navBarAction: Function }
       <Text style={CustomElementStyles.mainHeaderText}>Twoja muzyka</Text>
       {generateShortCourseList()}
       <View style={{ flex: 1, flexDirection: "row", marginTop: 12 }}>
-        <TouchableOpacity onPress={() => props.changeTab(2)}>
-          <View style={[CustomElementStyles.mainButton]}>
-            <Icon name="plus" size={31} color={Colors.tintColor} />
-          </View>
+        <TouchableOpacity onPress={() => props.changeTab(2)} style={{ paddingLeft: 1.5 }}>
+          <AddButton />
         </TouchableOpacity>
         <View style={{
           marginLeft: 19, flex: 1, flexDirection: "column",
