@@ -9,6 +9,7 @@ import MusicList from '../constants/MusicList'
 import { Feather } from '@expo/vector-icons';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Restart } from 'fiction-expo-restart';
+import * as AppInfo from '../app.json'
 
 
 const moodDataBlank = null;
@@ -55,11 +56,12 @@ export default function Settings() {
         storeJSON(`music-${MusicList[5].title}-${MusicList[5].id}`, musicDataBlank);
         storeJSON(`music-${MusicList[6].title}-${MusicList[6].id}`, musicDataBlank);
 
-
+        AsyncStorage.removeItem('LastDayOnline');
+        AsyncStorage.removeItem('streakInfo');
     }
 
     const wipeAppData = () => {
-        Alert.alert("Ostrzeżenie!", "Ta akcja jest nieodwracalna. Kontynuować?", [
+        Alert.alert("Ostrzeżenie!", "Ta operacja jest nieodwracalna. Po zatwierdzeniu aplikacja się zrestartuje.\nKontynuować?", [
             {
                 text: "Nie",
                 onPress: () => null,
@@ -113,7 +115,7 @@ export default function Settings() {
 
         <View style={{ width: "100%" }}>
             <ScrollView>
-                <View style={{ marginLeft: "5%", paddingBottom: 20 }}>
+                <View style={{ marginLeft: "5%", marginBottom: 20, }}>
                     <Text style={CustomElementStyles.settingsIndicator}>OGÓLNE</Text>
                     <SettingBar iconName="voicemail" buttonText="Lektor" handleClick={changeLector} color={Colors.other} pressOpacity={1} />
                     <SettingBar iconName="message-square" buttonText="Powiadomienia" handleClick={notifications} color={Colors.other} pressOpacity={1} />
@@ -127,7 +129,11 @@ export default function Settings() {
                     <SettingBar iconName="info" buttonText="Partnerzy" handleClick={partners} color={Colors.whiteOff} pressOpacity={.4} />
                 </View>
             </ScrollView>
-        </View>
+            <View style={{ flex: 1, flexDirection: "column", justifyContent: "center", width: "100%", position: "absolute", bottom: 25 }}>
+                <Text style={{ textAlign: "center", fontFamily: "Poppins_300Light", letterSpacing: .3, color: Colors.other, opacity: .8, marginBottom: -3 }}>wersja: {AppInfo.expo.version}</Text>
+                <Text style={{ textAlign: "center", fontFamily: "Poppins_300Light", letterSpacing: .3, color: Colors.other, opacity: .6, fontSize: 12 }}>© Copyright 2021 Mikołaj Mrózek</Text>
+            </View>
+        </View >
 
 
     );
