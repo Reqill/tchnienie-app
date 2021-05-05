@@ -33,7 +33,7 @@ export default function TabOneScreen(props: { tabView: boolean; toggleNavBar: Fu
       <BasicContainer content={<MoodCart tabView={props.tabView} toggleNavBar={props.toggleNavBar} />} />
       <BasicContainer content={<CourseSummaryCard changeTab={props.changeTab} />} />
       <BasicContainer content={<MusicSummaryCard changeTab={props.changeTab} navBarAction={props.toggleNavBar} />} />
-      <BasicContainer content={<StatsCard />} />
+      {/* <BasicContainer content={<StatsCard />} /> */}
       <View style={{ height: 85 }} />
     </View>
   );
