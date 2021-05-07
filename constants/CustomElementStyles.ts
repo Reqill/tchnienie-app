@@ -269,6 +269,28 @@ const CustomElementStyles = StyleSheet.create({
         width: 10,
         borderRadius: 10,
         opacity: .8
+    },
+    audioPrimary: {
+        fontFamily: "Poppins_500Medium",
+        fontSize: 20,
+        color: Colors.white,
+    },
+    audioSecondary: {
+        fontFamily: "Poppins_400Regular",
+        fontSize: 14,
+        color: Colors.other,
+        marginTop: -5
+    },
+    onTime: {
+        fontFamily: "Poppins_400Regular",
+        fontSize: 13,
+        opacity: .95,
+        color: Colors.whiteOff,
+    },
+    toTime: {
+        fontFamily: "Poppins_400Regular",
+        fontSize: 13,
+        color: Colors.other,
     }
 });
 
