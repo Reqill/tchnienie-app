@@ -39,6 +39,7 @@ interface IState {
     activeCourse: boolean;
     activeAudio: Array<any>;
     activeDailyMood: boolean;
+    isPlaying: boolean;
 }
 
 function Icon(props: { name: React.ComponentProps<typeof Feather>['name']; color: string }) {
@@ -63,6 +64,7 @@ export default class NavigationHandler extends React.Component<IProps, IState> {
             activeCourse: false,
             activeDailyMood: false,
             activeAudio: [],
+            isPlaying: false,
         };
         this.changeTabIdx = this.changeTabIdx.bind(this)
         this.toggleNavBar = this.toggleNavBar.bind(this)
@@ -321,7 +323,7 @@ export default class NavigationHandler extends React.Component<IProps, IState> {
                         }]}>
                             <DailyMood toggleNavBar={this.toggleNavBar} />
                         </View>
-                        <View style={{ height: this.state.activeCourse ? "100%" : "0%", backgroundColor: Colors.backgroundColor, width: "100%", zIndex: 101, position: "absolute", bottom: 0, maxHeight: "100%", maxWidth: "100%" }}>
+                        <View style={[styles.hiddenScreen, { height: this.state.activeCourse ? "100%" : "0%", opacity: this.state.activeCourse ? 1 : 0 }]}>
                             <AudioPlayer activeAudio={this.state.activeAudio} />
                         </View>
                     </View>
