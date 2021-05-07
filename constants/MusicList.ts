@@ -4,7 +4,7 @@ export default [
         title: "Sample Audio 0",
         duration: "0:57",
         imgPath: "https://i.imgur.com/IXkTBn8.png",
-        trackPath: "",
+        trackPath: "../assets/sounds/bensound-erf.mp3",
         author: "Ja",
     },
     {
