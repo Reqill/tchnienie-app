@@ -147,7 +147,7 @@ const MusicCard = (props: { item: any; musicIdx: any; toggleNavBar: Function }) 
                                             <TouchableOpacity onPress={() => likeMusic()}>
                                                 <Icon name="heart" color={isLiked ? Colors.pinkAccent : Colors.whiteOff} size={27} />
                                             </TouchableOpacity>
-                                            <TouchableOpacity style={{ marginRight: -7 }} onPress={() => handleChange("TOGGLE_COURSE", ["MUSIC", musicIdx])}>
+                                            <TouchableOpacity style={{ marginRight: -7 }} onPress={() => handleChange("TOGGLE_COURSE", ["MUSIC", musicIdx, 0])}>
                                                 <Icon name="play" color={Colors.whiteOff} size={28} />
                                             </TouchableOpacity>
                                             <TouchableOpacity onPress={() => alertcik()} activeOpacity={1} style={{ opacity: .4 }}>
